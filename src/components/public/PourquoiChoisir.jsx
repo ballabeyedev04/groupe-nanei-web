@@ -1,4 +1,5 @@
 import { useDevisModal } from '../../context/DevisModalContext';
+import Apparition from '../ui/Apparition';
 
 // Contenu du cahier §5 "Pourquoi choisir Groupe Nanei ?" — repris tel quel,
 // y compris la numérotation 01 à 05.
@@ -17,29 +18,32 @@ export default function PourquoiChoisir() {
     <section id="engagements" style={{ padding: '72px 0' }}>
       <div className="conteneur" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 48, alignItems: 'start' }}>
         <div>
-          <span className="etiquette-section">Pourquoi choisir Groupe Nanei ?</span>
-          <h2 className="titre-section">Une équipe dédiée à la performance de vos opérations</h2>
-          <p style={{ color: 'var(--texte-doux)', fontSize: 15.5, lineHeight: 1.65, marginBottom: 32, maxWidth: 620 }}>
-            Nous mettons en place une organisation claire, adaptée à la configuration du chantier et à ses
-            différentes phases. Nos logisticiens travaillent au contact des équipes travaux, des sous-traitants,
-            des transporteurs et des responsables du site pour assurer une circulation fluide de l'information et
-            des flux.
-          </p>
+          <Apparition>
+            <span className="etiquette-section">Pourquoi choisir Groupe Nanei ?</span>
+            <h2 className="titre-section">Une équipe dédiée à la performance de vos opérations</h2>
+            <p style={{ color: 'var(--texte-doux)', fontSize: 15.5, lineHeight: 1.65, marginBottom: 32, maxWidth: 620 }}>
+              Nous mettons en place une organisation claire, adaptée à la configuration du chantier et à ses
+              différentes phases. Nos logisticiens travaillent au contact des équipes travaux, des sous-traitants,
+              des transporteurs et des responsables du site pour assurer une circulation fluide de l'information et
+              des flux.
+            </p>
+          </Apparition>
 
           <div style={{ display: 'grid', gap: 22 }}>
-            {POINTS.map((p) => (
-              <div key={p.n} style={{ display: 'flex', gap: 18 }}>
+            {POINTS.map((p, i) => (
+              <Apparition key={p.n} delai={i * 70} style={{ display: 'flex', gap: 18 }}>
                 <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--bleu-ciel)', width: 40, flexShrink: 0 }}>{p.n}</span>
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--bleu-marine)' }}>{p.titre}</div>
                   <div style={{ fontSize: 14, color: 'var(--texte-doux)' }}>{p.texte}</div>
                 </div>
-              </div>
+              </Apparition>
             ))}
           </div>
         </div>
 
-        <div
+        <Apparition
+          delai={150}
           style={{
             background: 'var(--bleu-action)',
             borderRadius: 'var(--rayon)',
@@ -69,7 +73,7 @@ export default function PourquoiChoisir() {
               Nous contacter
             </a>
           </div>
-        </div>
+        </Apparition>
       </div>
 
       <style>{`

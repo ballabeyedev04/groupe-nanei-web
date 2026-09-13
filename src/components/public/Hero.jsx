@@ -1,5 +1,6 @@
 import heroImg from '../../assets/img/hero.jpg';
 import { useDevisModal } from '../../context/DevisModalContext';
+import Apparition from '../ui/Apparition';
 
 // Texte repris mot pour mot du cahier §3 "Bannière principale / Hero".
 export default function Hero() {
@@ -8,7 +9,7 @@ export default function Hero() {
   return (
     <section id="accueil" style={{ background: 'linear-gradient(180deg, var(--bleu-ciel-clair), #fff 85%)' }}>
       <div
-        className="conteneur"
+        className="conteneur hero-grille"
         style={{
           display: 'grid',
           gridTemplateColumns: '1.05fr 0.95fr',
@@ -18,7 +19,7 @@ export default function Hero() {
           paddingBottom: 56,
         }}
       >
-        <div>
+        <Apparition>
           <span className="etiquette-section">Logistique de chantier</span>
           <h1 style={{ fontSize: 'clamp(30px, 4.2vw, 46px)', fontWeight: 800, color: 'var(--bleu-marine)', lineHeight: 1.12, margin: '0 0 18px' }}>
             La logistique au service de vos chantiers
@@ -36,17 +37,23 @@ export default function Hero() {
               Demander un devis →
             </button>
           </div>
-        </div>
+        </Apparition>
 
-        <div style={{ position: 'relative' }}>
+        <Apparition delai={150} style={{ position: 'relative' }}>
           <img
             src={heroImg}
-            alt="Logisticien Groupe Nanei coordonnant la circulation sur un chantier"
+            alt="Logisticien Groupe Nanei de dos, gilet haute visibilité et casque blanc, coordonnant la circulation sur un chantier moderne"
             loading="eager"
             style={{ width: '100%', borderRadius: 'var(--rayon)', boxShadow: 'var(--ombre)', aspectRatio: '4/3.4', objectFit: 'cover' }}
           />
-        </div>
+        </Apparition>
       </div>
+
+      <style>{`
+        @media (max-width: 880px) {
+          .hero-grille { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

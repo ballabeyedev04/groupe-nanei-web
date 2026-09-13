@@ -141,3 +141,75 @@ button {
     padding: 0 18px;
   }
 }
+
+/* Transitions au survol — cahier §6 : "apparition douce des cartes [...],
+   transitions au survol". Regroupées ici plutôt que dupliquées en inline
+   pour rester cohérentes sur tout le site, et désactivées si l'utilisateur
+   a demandé de réduire les animations. */
+.carte-animee {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.carte-animee:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px rgba(7, 59, 111, 0.14);
+}
+
+.image-zoom {
+  overflow: hidden;
+}
+.image-zoom img {
+  transition: transform 0.5s ease;
+}
+.image-zoom:hover img {
+  transform: scale(1.06);
+}
+
+.lien-nav {
+  position: relative;
+  padding-bottom: 3px;
+}
+.lien-nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 2px;
+  background: var(--bleu-action);
+  transition: right 0.25s ease;
+}
+.lien-nav:hover::after,
+.lien-nav--actif::after {
+  right: 0;
+}
+.lien-nav--actif {
+  color: var(--bleu-action) !important;
+}
+
+/* Lien d'évitement : invisible tant qu'il n'a pas le focus clavier, permet
+   de sauter directement au contenu — cahier §6, "Accessibilité : [...]
+   navigation clavier". */
+.lien-evitement {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  background: var(--bleu-marine);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 0 0 10px 0;
+  z-index: 200;
+  font-weight: 700;
+  text-decoration: none;
+}
+.lien-evitement:focus {
+  left: 0;
+  top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carte-animee,
+  .image-zoom img,
+  .lien-nav::after {
+    transition: none !important;
+  }
+}

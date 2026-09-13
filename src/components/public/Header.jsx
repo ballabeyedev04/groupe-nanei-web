@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Logo from './Logo';
 import { useDevisModal } from '../../context/DevisModalContext';
 
@@ -6,14 +6,35 @@ const LIENS = [
   { href: '#accueil', label: 'Accueil' },
   { href: '#a-propos', label: 'À propos' },
   { href: '#services', label: 'Nos services' },
+  { href: '#methode', label: 'Notre méthode' },
   { href: '#realisations', label: 'Nos réalisations' },
   { href: '#engagements', label: 'Engagements' },
+  { href: '#actualites', label: 'Actualités' },
   { href: '#contact', label: 'Contact' },
 ];
 
 export default function Header() {
   const [menuOuvert, setMenuOuvert] = useState(false);
+  const [sectionActive, setSectionActive] = useState('#accueil');
   const { ouvrir } = useDevisModal();
+
+  // Scrollspy léger : surligne dans le menu la section actuellement à
+  // l'écran, sans dépendance externe — juste un IntersectionObserver par
+  // section (cahier §6 : transitions discrètes, pas d'effet lourd).
+  useEffect(() => {
+    const sections = LIENS.map((l) => document.querySelector(l.href)).filter(Boolean);
+    if (sections.length === 0) return undefined;
+
+    const observateur = new IntersectionObserver(
+      (entrees) => {
+        const visible = entrees.find((e) => e.isIntersecting);
+        if (visible) setSectionActive(`#${visible.target.id}`);
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    );
+    sections.forEach((s) => observateur.observe(s));
+    return () => observateur.disconnect();
+  }, []);
 
   function allerA(href) {
     setMenuOuvert(false);
@@ -40,7 +61,7 @@ export default function Header() {
         </a>
 
         <nav
-          style={{ display: 'flex', gap: 28, alignItems: 'center' }}
+          style={{ display: 'flex', gap: 22, alignItems: 'center' }}
           className="nav-desktop"
         >
           {LIENS.map((lien) => (
@@ -48,7 +69,8 @@ export default function Header() {
               key={lien.href}
               href={lien.href}
               onClick={(e) => { e.preventDefault(); allerA(lien.href); }}
-              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600, fontSize: 14.5 }}
+              className={`lien-nav ${sectionActive === lien.href ? 'lien-nav--actif' : ''}`}
+              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600, fontSize: 14 }}
             >
               {lien.label}
             </a>
@@ -121,7 +143,7 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 880px) {
+        @media (max-width: 1000px) {
           .nav-desktop { display: none !important; }
           .hidden-mobile { display: none !important; }
           .bouton-menu { display: inline-flex !important; }

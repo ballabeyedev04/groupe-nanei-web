@@ -1,3 +1,5 @@
+import Apparition from '../ui/Apparition';
+
 // Les 8 services et leurs textes proviennent du cahier §4 "Nos services -
 // textes complets", repris mot pour mot.
 const SERVICES = [
@@ -49,35 +51,38 @@ export default function Services() {
   return (
     <section id="services" style={{ padding: '72px 0', background: 'var(--bleu-ciel-clair)' }}>
       <div className="conteneur">
-        <div style={{ marginBottom: 40, maxWidth: 640 }}>
+        <Apparition style={{ marginBottom: 40, maxWidth: 640 }}>
           <span className="etiquette-section">Nos services</span>
           <h2 className="titre-section">Une solution complète pour la gestion de vos chantiers</h2>
-        </div>
+        </Apparition>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 22 }}>
-          {SERVICES.map((s) => (
-            <div
-              key={s.titre}
-              style={{
-                background: 'var(--blanc)',
-                borderRadius: 'var(--rayon)',
-                padding: '26px 24px',
-                boxShadow: 'var(--ombre)',
-              }}
-            >
-              <span
+          {SERVICES.map((s, i) => (
+            <Apparition key={s.titre} delai={(i % 4) * 80}>
+              <div
+                className="carte-animee"
                 style={{
-                  width: 48, height: 48, borderRadius: 12, background: 'var(--bleu-ciel-clair)',
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+                  background: 'var(--blanc)',
+                  borderRadius: 'var(--rayon)',
+                  padding: '26px 24px',
+                  boxShadow: 'var(--ombre)',
+                  height: '100%',
                 }}
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A5EA8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                  {s.icone}
-                </svg>
-              </span>
-              <h3 style={{ margin: '0 0 8px', fontSize: 16.5, fontWeight: 700, color: 'var(--bleu-marine)' }}>{s.titre}</h3>
-              <p style={{ margin: 0, fontSize: 14, color: 'var(--texte-doux)', lineHeight: 1.6 }}>{s.texte}</p>
-            </div>
+                <span
+                  style={{
+                    width: 48, height: 48, borderRadius: 12, background: 'var(--bleu-ciel-clair)',
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+                  }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A5EA8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    {s.icone}
+                  </svg>
+                </span>
+                <h3 style={{ margin: '0 0 8px', fontSize: 16.5, fontWeight: 700, color: 'var(--bleu-marine)' }}>{s.titre}</h3>
+                <p style={{ margin: 0, fontSize: 14, color: 'var(--texte-doux)', lineHeight: 1.6 }}>{s.texte}</p>
+              </div>
+            </Apparition>
           ))}
         </div>
       </div>

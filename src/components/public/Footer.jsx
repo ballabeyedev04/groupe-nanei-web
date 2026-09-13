@@ -5,8 +5,10 @@ const LIENS = [
   { href: '#accueil', label: 'Accueil' },
   { href: '#a-propos', label: 'À propos' },
   { href: '#services', label: 'Nos services' },
+  { href: '#methode', label: 'Notre méthode' },
   { href: '#realisations', label: 'Nos réalisations' },
   { href: '#engagements', label: 'Engagements' },
+  { href: '#actualites', label: 'Actualités' },
   { href: '#contact', label: 'Contact' },
 ];
 

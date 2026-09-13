@@ -1,4 +1,6 @@
 import aboutImg from '../../assets/img/about.jpg';
+import Apparition from '../ui/Apparition';
+import { COORDONNEES } from '../../utils/coordonnees';
 
 // Contenu repris du cahier §3 "À propos de Groupe Nanei" — titre, texte de
 // présentation, promesse, et les 5 valeurs avec leurs pictogrammes.
@@ -30,7 +32,7 @@ export default function About() {
     <section id="a-propos" style={{ padding: '72px 0' }}>
       <div className="conteneur">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.85fr', gap: 48, alignItems: 'center', marginBottom: 44 }}>
-          <div>
+          <Apparition>
             <span className="etiquette-section">À propos de Groupe Nanei</span>
             <h2 className="titre-section">Un partenaire de confiance pour vos chantiers</h2>
             <p style={{ fontSize: 16, color: 'var(--texte-doux)', lineHeight: 1.7 }}>
@@ -41,43 +43,56 @@ export default function About() {
               travaux de se concentrer sur leur métier pendant que nous assurons une logistique rigoureuse,
               réactive et adaptée aux contraintes du chantier.
             </p>
-          </div>
-          <img
-            src={aboutImg}
-            alt="Logisticien Groupe Nanei consultant une tablette sur un chantier"
-            loading="lazy"
-            style={{ width: '100%', borderRadius: 'var(--rayon)', boxShadow: 'var(--ombre)', aspectRatio: '4/3.2', objectFit: 'cover' }}
-          />
+            <span
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 6,
+                background: 'var(--bleu-ciel-clair)', color: 'var(--bleu-marine)', fontWeight: 600, fontSize: 13.5,
+                padding: '8px 14px', borderRadius: 999,
+              }}
+            >
+              📍 Intervention : {COORDONNEES.zoneIntervention}
+            </span>
+          </Apparition>
+          <Apparition delai={120}>
+            <img
+              src={aboutImg}
+              alt="Logisticien Groupe Nanei consultant une tablette sur un chantier"
+              loading="lazy"
+              style={{ width: '100%', borderRadius: 'var(--rayon)', boxShadow: 'var(--ombre)', aspectRatio: '4/3.2', objectFit: 'cover' }}
+            />
+          </Apparition>
         </div>
 
-        <div
-          style={{
-            background: 'var(--bleu-marine)',
-            borderRadius: 'var(--rayon)',
-            padding: '30px 34px',
-            color: '#fff',
-            marginBottom: 44,
-          }}
-        >
-          <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--bleu-ciel)' }}>NOTRE PROMESSE</span>
-          <h3 style={{ margin: '8px 0 10px', fontSize: 22, fontWeight: 800 }}>
-            Des chantiers mieux organisés, plus sûrs et plus efficaces.
-          </h3>
-          <p style={{ margin: 0, color: '#DCEEFF', lineHeight: 1.65, maxWidth: 720 }}>
-            Une logistique maîtrisée réduit les pertes de temps, limite les encombrements, améliore la circulation
-            et contribue directement à la qualité d'exécution du chantier.
-          </p>
-        </div>
+        <Apparition>
+          <div
+            style={{
+              background: 'var(--bleu-marine)',
+              borderRadius: 'var(--rayon)',
+              padding: '30px 34px',
+              color: '#fff',
+              marginBottom: 44,
+            }}
+          >
+            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--bleu-ciel)' }}>NOTRE PROMESSE</span>
+            <h3 style={{ margin: '8px 0 10px', fontSize: 22, fontWeight: 800 }}>
+              Des chantiers mieux organisés, plus sûrs et plus efficaces.
+            </h3>
+            <p style={{ margin: 0, color: '#DCEEFF', lineHeight: 1.65, maxWidth: 720 }}>
+              Une logistique maîtrisée réduit les pertes de temps, limite les encombrements, améliore la circulation
+              et contribue directement à la qualité d'exécution du chantier.
+            </p>
+          </div>
+        </Apparition>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 20 }}>
-          {VALEURS.map((v) => (
-            <div key={v.titre} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+          {VALEURS.map((v, i) => (
+            <Apparition key={v.titre} delai={i * 80} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
               <IconeValeur />
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--bleu-marine)', marginBottom: 4 }}>{v.titre}</div>
                 <div style={{ fontSize: 13.5, color: 'var(--texte-doux)', lineHeight: 1.5 }}>{v.texte}</div>
               </div>
-            </div>
+            </Apparition>
           ))}
         </div>
       </div>
