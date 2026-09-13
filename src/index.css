@@ -1,0 +1,143 @@
+/* Palette imposée par le cahier de direction artistique (§1) :
+   bleu ciel pour les fonds, bleu action pour les CTA, bleu marine pour les
+   zones de confiance (header/footer/admin). Aucune autre couleur d'accent
+   (le gold vu sur certaines maquettes de brainstorm n'est pas retenu). */
+:root {
+  --bleu-ciel-clair: #eaf6ff;
+  --bleu-ciel: #cfeaff;
+  --bleu-action: #0a5ea8;
+  --bleu-action-hover: #084b87;
+  --bleu-marine: #073b6f;
+  --bleu-marine-clair: #0f4d8a;
+  --blanc: #ffffff;
+  --texte: #16324a;
+  --texte-doux: #4b6b85;
+  --bordure: #d7ebfb;
+  --succes: #1f8a5f;
+  --erreur: #c0392b;
+  --ombre: 0 12px 32px rgba(7, 59, 111, 0.1);
+  --rayon: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--texte);
+  background: var(--blanc);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+.conteneur {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.bouton:active {
+  transform: translateY(1px);
+}
+
+.bouton--plein {
+  background: var(--bleu-action);
+  color: var(--blanc);
+}
+
+.bouton--plein:hover {
+  background: var(--bleu-action-hover);
+}
+
+.bouton--contour {
+  background: transparent;
+  color: var(--blanc);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+}
+
+.bouton--contour:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.bouton--contour-bleu {
+  background: transparent;
+  color: var(--bleu-action);
+  border: 1.5px solid var(--bleu-action);
+}
+
+.bouton--contour-bleu:hover {
+  background: var(--bleu-ciel-clair);
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.etiquette-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bleu-action);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.etiquette-section::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bleu-action);
+}
+
+.titre-section {
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 800;
+  color: var(--bleu-marine);
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+
+@media (max-width: 720px) {
+  .conteneur {
+    padding: 0 18px;
+  }
+}
