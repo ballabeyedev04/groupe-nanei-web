@@ -54,14 +54,18 @@ export default function Header() {
     >
       <div
         className="conteneur"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 76 }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, height: 76 }}
       >
-        <a href="#accueil" onClick={(e) => { e.preventDefault(); allerA('#accueil'); }} style={{ textDecoration: 'none' }}>
+        <a
+          href="#accueil"
+          onClick={(e) => { e.preventDefault(); allerA('#accueil'); }}
+          style={{ textDecoration: 'none', flexShrink: 0 }}
+        >
           <Logo taille={38} />
         </a>
 
         <nav
-          style={{ display: 'flex', gap: 22, alignItems: 'center' }}
+          style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'nowrap' }}
           className="nav-desktop"
         >
           {LIENS.map((lien) => (
@@ -70,14 +74,14 @@ export default function Header() {
               href={lien.href}
               onClick={(e) => { e.preventDefault(); allerA(lien.href); }}
               className={`lien-nav ${sectionActive === lien.href ? 'lien-nav--actif' : ''}`}
-              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600, fontSize: 14 }}
+              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap' }}
             >
               {lien.label}
             </a>
           ))}
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           <button
             type="button"
             onClick={ouvrir}
@@ -143,7 +147,11 @@ export default function Header() {
       )}
 
       <style>{`
-        @media (max-width: 1000px) {
+        /* Le menu complet (8 liens + logo + bouton) a besoin de place : on
+           bascule sur le menu mobile dès que ça commence à se resserrer,
+           plutôt que de laisser "Contact" coller au bouton "Demander un
+           devis" dans l'entre-deux. */
+        @media (max-width: 1220px) {
           .nav-desktop { display: none !important; }
           .hidden-mobile { display: none !important; }
           .bouton-menu { display: inline-flex !important; }

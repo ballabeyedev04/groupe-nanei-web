@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '../ui/Modal';
 import { envoyerDemandeDevis } from '../../service/devisService';
+import { succes } from '../../utils/swal';
 
 const TYPES_BESOIN = [
   'Gestion des bennes',
@@ -28,7 +29,7 @@ const styleLabel = { display: 'block', fontSize: 13, fontWeight: 600, color: 'va
 export default function DevisModal({ ouvert, onFermer }) {
   const [valeurs, setValeurs] = useState(VIDE);
   const [envoi, setEnvoi] = useState(false);
-  const [statut, setStatut] = useState(null); // { type: 'succes' | 'erreur', message }
+  const [erreur, setErreur] = useState('');
 
   function champ(nom) {
     return {
@@ -41,25 +42,32 @@ export default function DevisModal({ ouvert, onFermer }) {
     onFermer();
     setTimeout(() => {
       setValeurs(VIDE);
-      setStatut(null);
+      setErreur('');
     }, 200);
   }
 
   async function soumettre(e) {
     e.preventDefault();
     if (!valeurs.consentementRgpd) {
-      setStatut({ type: 'erreur', message: 'Merci de confirmer votre consentement pour être recontacté.' });
+      setErreur('Merci de confirmer votre consentement pour être recontacté.');
       return;
     }
     setEnvoi(true);
-    setStatut(null);
+    setErreur('');
     try {
       await envoyerDemandeDevis(valeurs);
-      setStatut({ type: 'succes', message: 'Votre demande a bien été envoyée. Notre équipe revient vers vous rapidement.' });
-      setValeurs(VIDE);
+      // La modale se ferme et cède la place à une confirmation centrée,
+      // bien plus visible qu'un simple message dans le formulaire — le
+      // visiteur sait alors clairement que sa demande est partie et ce
+      // qu'il doit attendre ensuite.
+      fermerEtReinitialiser();
+      succes({
+        titre: 'Votre demande a été envoyée !',
+        texte: 'Vous serez notifié par e-mail dès que votre demande sera traitée.',
+      });
     } catch (err) {
       const message = err?.response?.data?.message || "L'envoi a échoué. Merci de réessayer dans un instant.";
-      setStatut({ type: 'erreur', message });
+      setErreur(message);
     } finally {
       setEnvoi(false);
     }
@@ -67,15 +75,6 @@ export default function DevisModal({ ouvert, onFermer }) {
 
   return (
     <Modal ouvert={ouvert} onFermer={fermerEtReinitialiser} titre="Demander un devis" largeur={560}>
-      {statut?.type === 'succes' ? (
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
-          <p style={{ color: 'var(--texte)', fontSize: 15.5, lineHeight: 1.6 }}>{statut.message}</p>
-          <button type="button" onClick={fermerEtReinitialiser} className="bouton bouton--plein" style={{ marginTop: 10 }}>
-            Fermer
-          </button>
-        </div>
-      ) : (
         <form onSubmit={soumettre} style={{ display: 'grid', gap: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
             <div>
@@ -148,15 +147,14 @@ export default function DevisModal({ ouvert, onFermer }) {
             demande, conformément à la politique de confidentialité. *
           </label>
 
-          {statut?.type === 'erreur' && (
-            <p style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{statut.message}</p>
+          {erreur && (
+            <p style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{erreur}</p>
           )}
 
           <button type="submit" disabled={envoi} className="bouton bouton--plein" style={{ justifyContent: 'center' }}>
             {envoi ? 'Envoi en cours…' : 'Envoyer ma demande'}
           </button>
         </form>
-      )}
     </Modal>
   );
 }
