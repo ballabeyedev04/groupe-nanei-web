@@ -20,4 +20,20 @@ export function erreur({ titre, texte }) {
   return SwalSite.fire({ icon: 'error', titleText: titre, text: texte, confirmButtonText: 'Fermer' });
 }
 
+// Confirmation avant une action irréversible (suppression) — résout `true`
+// seulement si l'admin a cliqué sur le bouton de confirmation.
+export async function confirmer({ titre, texte, confirmButtonText = 'Confirmer' }) {
+  const resultat = await SwalSite.fire({
+    icon: 'warning',
+    titleText: titre,
+    text: texte,
+    showCancelButton: true,
+    confirmButtonText,
+    cancelButtonText: 'Annuler',
+    confirmButtonColor: '#C0392B',
+    reverseButtons: true,
+  });
+  return resultat.isConfirmed;
+}
+
 export default SwalSite;

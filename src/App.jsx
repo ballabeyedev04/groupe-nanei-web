@@ -9,6 +9,8 @@ import LoginPage from './pages/admin/LoginPage';
 import AdminLayout from './layouts/AdminLayout';
 import DashboardPage from './pages/admin/DashboardPage';
 import DevisListPage from './pages/admin/DevisListPage';
+import ActualitesPage from './pages/admin/ActualitesPage';
+import CoordonneesPage from './pages/admin/CoordonneesPage';
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<DashboardPage />} />
             <Route path="devis" element={<DevisListPage />} />
+            <Route path="actualites" element={<ActualitesPage />} />
+            <Route path="coordonnees" element={<CoordonneesPage />} />
           </Route>
         </Route>
 

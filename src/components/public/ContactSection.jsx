@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { useDevisModal } from '../../context/DevisModalContext';
 import { COORDONNEES } from '../../utils/coordonnees';
+import { obtenirCoordonneesPubliques } from '../../service/coordonneesService';
 import Apparition from '../ui/Apparition';
 
 function LignePlaceholder({ children, present }) {
@@ -8,6 +10,16 @@ function LignePlaceholder({ children, present }) {
 
 export default function ContactSection() {
   const { ouvrir } = useDevisModal();
+  // Valeurs par défaut = coordonnees.js (placeholders "à renseigner") tant
+  // que l'appel réseau n'a pas répondu ou que rien n'est encore configuré
+  // côté admin — jamais un flash de contenu vide.
+  const [coordonnees, setCoordonnees] = useState({ telephone: COORDONNEES.telephone, email: COORDONNEES.email, adresse: '' });
+
+  useEffect(() => {
+    obtenirCoordonneesPubliques()
+      .then((c) => setCoordonnees({ telephone: c.telephone || '', email: c.email || '', adresse: c.adresse || '' }))
+      .catch(() => {}); // silencieux : les placeholders restent affichés
+  }, []);
 
   return (
     <section id="contact" style={{ background: 'var(--bleu-marine)', padding: '56px 0' }}>
@@ -28,19 +40,22 @@ export default function ContactSection() {
         <Apparition delai={120} style={{ display: 'grid', gap: 12, color: '#fff', fontSize: 14.5 }}>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <span>📞</span>
-            <LignePlaceholder present={!!COORDONNEES.telephone}>
-              {COORDONNEES.telephone || 'Téléphone à renseigner'}
+            <LignePlaceholder present={!!coordonnees.telephone}>
+              {coordonnees.telephone || 'Téléphone à renseigner'}
             </LignePlaceholder>
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <span>✉️</span>
-            <LignePlaceholder present={!!COORDONNEES.email}>
-              {COORDONNEES.email || 'E-mail à renseigner'}
+            <LignePlaceholder present={!!coordonnees.email}>
+              {coordonnees.email || 'E-mail à renseigner'}
             </LignePlaceholder>
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <span>📍</span>
-            <LignePlaceholder present>{COORDONNEES.zoneIntervention}</LignePlaceholder>
+            {/* L'adresse précise (si configurée) prend le pas sur la zone
+                d'intervention générique — les deux ne sont jamais affichées
+                à vide en même temps. */}
+            <LignePlaceholder present>{coordonnees.adresse || COORDONNEES.zoneIntervention}</LignePlaceholder>
           </div>
         </Apparition>
       </div>

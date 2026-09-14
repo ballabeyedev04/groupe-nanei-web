@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 const LIENS = [
   { to: '/admin', label: 'Accueil', exact: true, icone: '🏠' },
   { to: '/admin/devis', label: 'Demandes de devis', icone: '📋' },
+  { to: '/admin/actualites', label: 'Actualités', icone: '📰' },
+  { to: '/admin/coordonnees', label: 'Coordonnées', icone: '☎️' },
 ];
 
 export default function AdminLayout() {
