@@ -9,11 +9,11 @@ import Icone from '../ui/Icone';
 // Texte adapté du cahier §3 "Bannière principale / Hero" (et de la promesse
 // du §3 "À propos" pour la dernière phrase). Les repères sous
 // le hero ne contiennent que des faits vérifiables (nombre de services et
-// d'engagements réellement présentés sur le site, zone d'intervention) —
+// d'engagements réellement présentés sur le site, adresse saisie dans l'admin) —
 // aucun chiffre commercial inventé.
 export default function Hero() {
   const { ouvrir } = useDevisModal();
-  const { zone } = useCoordonnees();
+  const { adresse } = useCoordonnees();
 
   return (
     <>
@@ -53,10 +53,12 @@ export default function Hero() {
               width="1122"
               height="294"
             />
-            <figcaption className="hero-legende">
-              <strong>Zone d'intervention</strong>
-              {zone}
-            </figcaption>
+            {adresse && (
+              <figcaption className="hero-legende">
+                <strong>Où nous trouver</strong>
+                {adresse}
+              </figcaption>
+            )}
           </Apparition>
         </div>
       </section>

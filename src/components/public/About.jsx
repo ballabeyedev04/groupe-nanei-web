@@ -1,8 +1,8 @@
-import aproposImg from '../../assets/img/apropos.webp';
 import useCoordonnees from '../../hooks/useCoordonnees';
 import { numeroter } from '../../data/site';
 import Apparition from '../ui/Apparition';
 import Icone from '../ui/Icone';
+import IllustrationChantier from './IllustrationChantier';
 
 // Contenu repris du cahier §3 "À propos de Groupe Nanei" — présentation,
 // promesse et les 5 valeurs. Les valeurs sont présentées en colonnes
@@ -16,7 +16,7 @@ const VALEURS = [
 ];
 
 export default function About() {
-  const { zone } = useCoordonnees();
+  const { adresse } = useCoordonnees();
 
   return (
     <section id="a-propos" className="section" aria-labelledby="titre-apropos">
@@ -24,17 +24,13 @@ export default function About() {
         <div className="apropos-grille">
           <div className="apropos-visuel">
             <Apparition as="figure" devoilement>
-              <img
-                src={aproposImg}
-                alt="Logisticien Groupe Nanei consultant une tablette sur un chantier en cours"
-                loading="lazy"
-                width="716"
-                height="558"
-              />
+              <IllustrationChantier titre="Chantier organisé par Groupe Nanei : bâtiment en construction, grue, benne, camion de livraison et accès sécurisé" />
             </Apparition>
-            <span className="apropos-zone">
-              <Icone nom="lieu" /> Intervention : {zone}
-            </span>
+            {adresse && (
+              <span className="apropos-zone">
+                <Icone nom="lieu" /> {adresse}
+              </span>
+            )}
           </div>
 
           <div className="apropos-texte">

@@ -2,12 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { listerDevis, obtenirDevis } from '../../service/devisService';
 import { formatDate } from '../../utils/format';
 import DevisDetailModal from '../../components/admin/DevisDetailModal';
-
-const styleBadge = (statut) => ({
-  display: 'inline-block', padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700,
-  background: statut === 'traite' ? '#EAF7EE' : '#FFF4E0',
-  color: statut === 'traite' ? 'var(--succes)' : '#B8860B',
-});
+import IconeAdmin from '../../components/admin/IconeAdmin';
 
 export default function DevisListPage() {
   const [page, setPage] = useState(1);
@@ -46,20 +41,31 @@ export default function DevisListPage() {
   }
 
   return (
-    <div>
-      <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--bleu-marine)', marginBottom: 20 }}>Demandes de devis</h1>
+    <>
+      <header className="adm-entete">
+        <div>
+          <h1>Les devis</h1>
+          <p>Demandes reçues via le formulaire du site. Ouvrez-en une pour la consulter et y répondre.</p>
+        </div>
+      </header>
 
-      <div style={{ display: 'flex', gap: 12, marginBottom: 18, flexWrap: 'wrap' }}>
-        <input
-          placeholder="Rechercher (nom, e-mail, société)…"
-          value={recherche}
-          onChange={(e) => { setPage(1); setRecherche(e.target.value); }}
-          style={{ flex: '1 1 240px', padding: '10px 13px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14 }}
-        />
+      <div className="adm-filtres">
+        <div className="adm-champ" style={{ margin: 0 }}>
+          <div className="adm-champ-saisie">
+            <IconeAdmin nom="recherche" />
+            <input
+              type="search"
+              aria-label="Rechercher une demande"
+              placeholder="Rechercher (nom, e-mail, société)…"
+              value={recherche}
+              onChange={(e) => { setPage(1); setRecherche(e.target.value); }}
+            />
+          </div>
+        </div>
         <select
+          aria-label="Filtrer par statut"
           value={statut}
           onChange={(e) => { setPage(1); setStatut(e.target.value); }}
-          style={{ padding: '10px 13px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14 }}
         >
           <option value="">Tous les statuts</option>
           <option value="nouveau">En attente</option>
@@ -67,38 +73,40 @@ export default function DevisListPage() {
         </select>
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 14, boxShadow: 'var(--ombre)', overflow: 'hidden' }}>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+      <section className="adm-carte" aria-label="Liste des demandes de devis">
+        <div className="adm-tableau-conteneur">
+          <table className="adm-tableau">
             <thead>
-              <tr style={{ background: 'var(--bleu-ciel-clair)', textAlign: 'left' }}>
-                <th style={{ padding: '12px 16px' }}>Nom</th>
-                <th style={{ padding: '12px 16px' }}>Société</th>
-                <th style={{ padding: '12px 16px' }}>Contact</th>
-                <th style={{ padding: '12px 16px' }}>Reçu le</th>
-                <th style={{ padding: '12px 16px' }}>Statut</th>
-                <th style={{ padding: '12px 16px' }} />
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Société</th>
+                <th scope="col">Contact</th>
+                <th scope="col">Reçu le</th>
+                <th scope="col">Statut</th>
+                <th scope="col" style={{ textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {resultat?.items.map((d) => (
-                <tr key={d.id} style={{ borderTop: '1px solid var(--bordure)' }}>
-                  <td style={{ padding: '12px 16px', fontWeight: 600 }}>{d.nom}</td>
-                  <td style={{ padding: '12px 16px', color: 'var(--texte-doux)' }}>{d.societe || '—'}</td>
-                  <td style={{ padding: '12px 16px', color: 'var(--texte-doux)' }}>{d.email}</td>
-                  <td style={{ padding: '12px 16px', color: 'var(--texte-doux)' }}>{formatDate(d.createdAt)}</td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <span style={styleBadge(d.statut)}>{d.statut === 'traite' ? 'Traité' : 'En attente'}</span>
+                <tr key={d.id}>
+                  <td className="adm-cellule-forte">{d.nom}</td>
+                  <td className="adm-cellule-douce">{d.societe || '—'}</td>
+                  <td className="adm-cellule-douce">
+                    {d.email}
+                    {d.telephone && <><br /><small>{d.telephone}</small></>}
                   </td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                    <button
-                      type="button"
-                      onClick={() => voirPlus(d.id)}
-                      className="bouton bouton--contour-bleu"
-                      style={{ padding: '7px 16px', fontSize: 13 }}
-                    >
-                      Voir plus
-                    </button>
+                  <td className="adm-cellule-douce" style={{ whiteSpace: 'nowrap' }}>{formatDate(d.createdAt)}</td>
+                  <td>
+                    <span className={`adm-badge ${d.statut === 'traite' ? 'adm-badge--succes' : 'adm-badge--attente'}`}>
+                      {d.statut === 'traite' ? 'Traité' : 'En attente'}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="adm-actions">
+                      <button type="button" onClick={() => voirPlus(d.id)} className="adm-bouton adm-bouton--contour adm-bouton--petit">
+                        <IconeAdmin nom="voir" taille={16} /> Voir
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -107,41 +115,47 @@ export default function DevisListPage() {
         </div>
 
         {!chargement && resultat?.items.length === 0 && (
-          <p style={{ padding: 24, textAlign: 'center', color: 'var(--texte-doux)' }}>Aucune demande pour le moment.</p>
+          <div className="adm-vide">
+            <span className="adm-vide-icone"><IconeAdmin nom="devis" taille={26} /></span>
+            <strong>{recherche || statut ? 'Aucun résultat' : 'Aucune demande pour le moment'}</strong>
+            <p>
+              {recherche || statut
+                ? 'Aucune demande ne correspond à ces filtres.'
+                : 'Les demandes envoyées depuis le formulaire du site apparaîtront ici.'}
+            </p>
+          </div>
         )}
-      </div>
 
-      {resultat && resultat.totalPages > 1 && (
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 18 }}>
-          <button
-            type="button"
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="bouton bouton--contour-bleu"
-            style={{ padding: '7px 16px', fontSize: 13 }}
-          >
-            ← Précédent
-          </button>
-          <span style={{ alignSelf: 'center', fontSize: 13.5, color: 'var(--texte-doux)' }}>
-            Page {resultat.page} / {resultat.totalPages}
-          </span>
-          <button
-            type="button"
-            disabled={page >= resultat.totalPages}
-            onClick={() => setPage((p) => p + 1)}
-            className="bouton bouton--contour-bleu"
-            style={{ padding: '7px 16px', fontSize: 13 }}
-          >
-            Suivant →
-          </button>
-        </div>
-      )}
+        {resultat && resultat.totalPages > 1 && (
+          <div className="adm-pagination">
+            <span>Page {resultat.page} sur {resultat.totalPages}</span>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                type="button"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+                className="adm-bouton adm-bouton--contour adm-bouton--petit"
+              >
+                <IconeAdmin nom="precedent" taille={16} /> Précédent
+              </button>
+              <button
+                type="button"
+                disabled={page >= resultat.totalPages}
+                onClick={() => setPage((p) => p + 1)}
+                className="adm-bouton adm-bouton--contour adm-bouton--petit"
+              >
+                Suivant <IconeAdmin nom="suivant" taille={16} />
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
 
       <DevisDetailModal
         devis={devisSelectionne}
         onFermer={() => setDevisSelectionne(null)}
         onReponduAvecSucces={surReponduAvecSucces}
       />
-    </div>
+    </>
   );
 }

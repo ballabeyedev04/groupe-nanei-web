@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Logo, { LogoEntete } from './Logo';
+import { LogoEntete } from './Logo';
 import Icone from '../ui/Icone';
 import { useDevisModal } from '../../context/DevisModalContext';
 import useDefilementDepasse from '../../hooks/useDefilement';
@@ -11,7 +11,7 @@ export default function Header() {
   const [sectionActive, setSectionActive] = useState('');
   const defile = useDefilementDepasse(12);
   const { ouvrir } = useDevisModal();
-  const { telephone, email, zone } = useCoordonnees();
+  const { telephone, email, adresse } = useCoordonnees();
 
   // Scrollspy : surligne dans le menu la section actuellement à l'écran.
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function Header() {
         inert={!menuOuvert}
       >
         <div className="menu-mobile-haut">
-          <Logo variante="blanc" taille={32} />
+          <LogoEntete variante="blanc" taille={40} />
           <button type="button" className="bouton-menu" onClick={() => setMenuOuvert(false)}>
             Fermer <Icone nom="fermer" taille={22} />
           </button>
@@ -125,7 +125,7 @@ export default function Header() {
           <div>
             {telephone && <div><a href={`tel:${telephone.replace(/\s+/g, '')}`} style={{ color: '#fff' }}>{telephone}</a></div>}
             {email && <div><a href={`mailto:${email}`} style={{ color: '#fff' }}>{email}</a></div>}
-            <div>{zone}</div>
+            {adresse && <div>{adresse}</div>}
           </div>
         </div>
       </div>

@@ -12,7 +12,14 @@ export async function obtenirCoordonnees() {
   return data.coordonnees;
 }
 
-export async function enregistrerCoordonnees(valeurs) {
+// Une seule ligne de contact existe : POST la crée (refusé s'il y en a déjà
+// une), PUT modifie celle qui existe.
+export async function creerCoordonnees(valeurs) {
+  const { data } = await api.post('/coordonnees', valeurs);
+  return data.coordonnees;
+}
+
+export async function modifierCoordonnees(valeurs) {
   const { data } = await api.put('/coordonnees', valeurs);
   return data.coordonnees;
 }

@@ -25,7 +25,7 @@ function Coordonnee({ icone, libelle, valeur, href }) {
 }
 
 export default function ContactSection() {
-  const { telephone, email, adresse, zone } = useCoordonnees();
+  const { telephone, email, adresse } = useCoordonnees();
 
   return (
     <section id="contact" className="section section--papier" aria-labelledby="titre-contact">
@@ -49,7 +49,7 @@ export default function ContactSection() {
                 valeur={email}
                 href={email && `mailto:${email}`}
               />
-              <Coordonnee icone="lieu" libelle={adresse ? 'Adresse' : "Zone d'intervention"} valeur={adresse || zone} />
+              <Coordonnee icone="lieu" libelle="Adresse" valeur={adresse} />
             </ul>
 
             <p className="contact-note">

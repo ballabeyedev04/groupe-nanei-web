@@ -1,70 +1,84 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import Logo from '../components/public/Logo';
+import { useState } from 'react';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { LogoEntete } from '../components/public/Logo';
+import IconeAdmin from '../components/admin/IconeAdmin';
 import { useAuth } from '../context/AuthContext';
+import { confirmer } from '../utils/swal';
+import { initiales } from '../utils/format';
 
+// Les 5 écrans du back-office ; la déconnexion (6e entrée) est un bouton.
 const LIENS = [
-  { to: '/admin', label: 'Accueil', exact: true, icone: '🏠' },
-  { to: '/admin/devis', label: 'Demandes de devis', icone: '📋' },
-  { to: '/admin/actualites', label: 'Actualités', icone: '📰' },
-  { to: '/admin/coordonnees', label: 'Coordonnées', icone: '☎️' },
+  { to: '/admin/dashboard', label: 'Accueil', icone: 'accueil' },
+  { to: '/admin/contact', label: 'Info Contact', icone: 'contact' },
+  { to: '/admin/devis', label: 'Les devis', icone: 'devis' },
+  { to: '/admin/actualites', label: 'Actualités', icone: 'actualites' },
+  { to: '/admin/profil', label: 'Profil', icone: 'profil' },
 ];
 
 export default function AdminLayout() {
   const { admin, seDeconnecter } = useAuth();
   const navigate = useNavigate();
+  const [menuOuvert, setMenuOuvert] = useState(false);
+  // Sur mobile, le menu se referme dès qu'on choisit un écran.
+  const fermerMenu = () => setMenuOuvert(false);
 
   async function deconnexion() {
+    const ok = await confirmer({
+      titre: 'Se déconnecter ?',
+      texte: 'Vous devrez saisir à nouveau vos identifiants pour accéder à l’espace administration.',
+      confirmButtonText: 'Se déconnecter',
+    });
+    if (!ok) return;
     await seDeconnecter();
     navigate('/admin/login', { replace: true });
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '240px 1fr', background: '#F5FAFF' }}>
-      <aside style={{ background: 'var(--bleu-marine)', color: '#fff', display: 'flex', flexDirection: 'column', padding: '24px 18px' }}>
-        <div style={{ marginBottom: 34, paddingLeft: 4 }}>
-          <Logo variante="blanc" taille={32} />
-        </div>
+    <div className={`adm${menuOuvert ? ' adm--menu-ouvert' : ''}`}>
+      <div className="adm-barre-mobile">
+        <LogoEntete taille={36} />
+        <button type="button" className="adm-bouton-icone" onClick={() => setMenuOuvert(true)} aria-label="Ouvrir le menu">
+          <IconeAdmin nom="menu" />
+        </button>
+      </div>
 
-        <nav style={{ display: 'grid', gap: 6, flex: 1 }}>
-          {LIENS.map((lien) => (
-            <NavLink
-              key={lien.to}
-              to={lien.to}
-              end={lien.exact}
-              style={({ isActive }) => ({
-                display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', borderRadius: 10,
-                textDecoration: 'none', fontWeight: 600, fontSize: 14.5,
-                color: isActive ? 'var(--bleu-marine)' : '#CFEAFF',
-                background: isActive ? '#fff' : 'transparent',
-              })}
-            >
-              <span>{lien.icone}</span>
-              {lien.label}
-            </NavLink>
-          ))}
-        </nav>
+      <div className="adm-coque">
+        <aside className="adm-menu" aria-label="Menu de l'administration">
+          <Link to="/admin/dashboard" className="adm-menu-logo" aria-label="Tableau de bord" onClick={fermerMenu}>
+            <LogoEntete variante="blanc" taille={40} />
+          </Link>
 
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: 16 }}>
-          <div style={{ fontSize: 12.5, color: '#9FC3E0', marginBottom: 10, paddingLeft: 4 }}>
-            Connecté·e : {admin?.email}
+          <p className="adm-menu-titre">Administration</p>
+          <nav className="adm-nav">
+            {LIENS.map((lien) => (
+              <NavLink key={lien.to} to={lien.to} className="adm-nav-lien" onClick={fermerMenu}>
+                <IconeAdmin nom={lien.icone} />
+                {lien.label}
+              </NavLink>
+            ))}
+            <button type="button" className="adm-nav-lien adm-nav-lien--sortie" onClick={deconnexion}>
+              <IconeAdmin nom="deconnexion" />
+              Déconnexion
+            </button>
+          </nav>
+
+          <div className="adm-menu-pied">
+            <Link to="/admin/profil" className="adm-menu-compte" style={{ textDecoration: 'none' }} onClick={fermerMenu}>
+              <span className="adm-avatar">{initiales(admin?.nom, admin?.email)}</span>
+              <span>
+                <strong>{admin?.nom}</strong>
+                <span>{admin?.email}</span>
+              </span>
+            </Link>
           </div>
-          <button
-            type="button"
-            onClick={deconnexion}
-            style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '11px 14px', borderRadius: 10,
-              border: '1px solid rgba(255,255,255,0.25)', background: 'transparent', color: '#fff',
-              fontWeight: 600, fontSize: 14.5, cursor: 'pointer',
-            }}
-          >
-            🚪 Déconnexion
-          </button>
-        </div>
-      </aside>
+        </aside>
 
-      <main style={{ padding: '32px 40px', maxWidth: 1100 }}>
-        <Outlet />
-      </main>
+        <div className="adm-voile" onClick={fermerMenu} aria-hidden="true" />
+
+        <main className="adm-contenu">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

@@ -53,9 +53,10 @@ export default function Logo({ variante = 'bleu', taille = 40 }) {
 // Logo de l'en-tête : le monogramme "GN" fourni par le client (or et argent
 // sur fond sombre) accompagné du nom et de la signature "BTP • Logistique •
 // Services", mis en page comme sur le logo officiel mais en version compacte.
-export function LogoEntete({ taille = 44 }) {
+// `variante="blanc"` pour les fonds marine (pied de page, menu mobile).
+export function LogoEntete({ taille = 44, variante = 'bleu' }) {
   return (
-    <span className="logo-entete">
+    <span className={`logo-entete${variante === 'blanc' ? ' logo-entete--blanc' : ''}`}>
       <img src={monogramme} alt="" width={taille} height={taille} className="logo-entete-mark" />
       <span className="logo-entete-texte">
         <span className="logo-entete-groupe">Groupe</span>

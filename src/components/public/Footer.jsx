@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
+import { LogoEntete } from './Logo';
 import Icone from '../ui/Icone';
 import useCoordonnees from '../../hooks/useCoordonnees';
 import { NAVIGATION, SERVICES, defilerVers } from '../../data/site';
@@ -14,13 +14,13 @@ function LienAncre({ href, children }) {
 
 export default function Footer() {
   const annee = new Date().getFullYear();
-  const { telephone, email, zone } = useCoordonnees();
+  const { telephone, email, adresse } = useCoordonnees();
 
   return (
     <footer className="pied">
       <div className="conteneur pied-grille">
         <div className="pied-presentation">
-          <Logo variante="blanc" taille={34} />
+          <LogoEntete variante="blanc" />
           <p>
             Logistique de chantier pour les entreprises du BTP : flux, accès, livraisons, bennes, propreté et
             sécurité logistique.
@@ -48,9 +48,24 @@ export default function Footer() {
         <div>
           <h2>Contact</h2>
           <ul>
-            {telephone && <li><a href={`tel:${telephone.replace(/\s+/g, '')}`}>{telephone}</a></li>}
-            {email && <li><a href={`mailto:${email}`}>{email}</a></li>}
-            <li>{zone}</li>
+            {telephone && (
+              <li className="pied-contact">
+                <Icone nom="telephone" taille={18} />
+                <a href={`tel:${telephone.replace(/\s+/g, '')}`}>{telephone}</a>
+              </li>
+            )}
+            {email && (
+              <li className="pied-contact">
+                <Icone nom="email" taille={18} />
+                <a href={`mailto:${email}`}>{email}</a>
+              </li>
+            )}
+            {adresse && (
+              <li className="pied-contact">
+                <Icone nom="lieu" taille={18} />
+                <span>{adresse}</span>
+              </li>
+            )}
             <li><LienAncre href="#contact">Demander un devis</LienAncre></li>
           </ul>
         </div>

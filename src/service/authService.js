@@ -13,3 +13,12 @@ export async function obtenirSessionCourante() {
 export async function logout() {
   await api.post('/auth/logout');
 }
+
+export async function modifierProfil(valeurs) {
+  const { data } = await api.put('/auth/profil', valeurs);
+  return data.admin;
+}
+
+export async function changerMotDePasse(valeurs) {
+  await api.put('/auth/mot-de-passe', valeurs);
+}

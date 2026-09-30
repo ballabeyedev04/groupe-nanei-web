@@ -23,7 +23,7 @@ export default function MentionsLegalesPage() {
       <p style={{ padding: '12px 16px', background: '#FFF7E6', border: '1px solid #F0D9A0', borderRadius: 10, fontSize: 13.5 }}>
         ⚠️ Page à compléter avant mise en ligne : SIRET, forme juridique et hébergeur doivent être renseignés dans{' '}
         <code>src/utils/coordonnees.js</code>. Le siège social et l'e-mail se renseignent depuis l'espace admin,
-        menu « Coordonnées ».
+        menu « Info Contact ».
       </p>
 
       <h2>Éditeur du site</h2>

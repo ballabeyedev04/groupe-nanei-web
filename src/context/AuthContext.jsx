@@ -29,8 +29,11 @@ export function AuthProvider({ children }) {
     setAdmin(null);
   }, []);
 
+  // Après une modification du profil : le menu et l'avatar suivent aussitôt.
+  const mettreAJourAdmin = useCallback((misAJour) => setAdmin(misAJour), []);
+
   return (
-    <AuthContext.Provider value={{ admin, verifie, seConnecter, seDeconnecter }}>
+    <AuthContext.Provider value={{ admin, verifie, seConnecter, seDeconnecter, mettreAJourAdmin }}>
       {children}
     </AuthContext.Provider>
   );

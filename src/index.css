@@ -270,19 +270,27 @@ h1, h2, h3 {
   transform: none;
 }
 
-/* Dévoilement d'image : le cadre s'ouvre de bas en haut. */
+/* Dévoilement d'image : le cadre s'ouvre de bas en haut. Le clip-path est
+   posé sur les enfants et non sur l'élément observé : un élément entièrement
+   masqué par son propre clip-path a une surface visible nulle pour
+   l'IntersectionObserver, qui ne déclenche alors jamais l'apparition. */
 .devoilement {
   overflow: hidden;
+}
+
+.devoilement > * {
   clip-path: inset(100% 0 0 0);
   transition: clip-path 1.2s var(--courbe);
+  transition-delay: inherit;
 }
 
 .devoilement img {
   transform: scale(1.08);
-  transition: transform 1.6s var(--courbe);
+  transition: clip-path 1.2s var(--courbe), transform 1.6s var(--courbe);
+  transition-delay: inherit;
 }
 
-.devoilement.apparition--visible {
+.devoilement.apparition--visible > * {
   clip-path: inset(0 0 0 0);
 }
 
@@ -385,6 +393,21 @@ h1, h2, h3 {
 .logo-entete-signature i {
   font-style: normal;
   margin: 0 1px;
+}
+
+/* Variante sur fond marine : or plus lumineux, nom et "Logistique" en blanc. */
+.logo-entete--blanc .logo-entete-groupe,
+.logo-entete--blanc .logo-entete-signature {
+  color: #e0a93a;
+}
+
+.logo-entete--blanc .logo-entete-nom,
+.logo-entete--blanc .logo-entete-signature b {
+  color: var(--blanc);
+}
+
+.logo-entete--blanc .logo-entete-mark {
+  box-shadow: 0 0 0 1px rgba(224, 169, 58, 0.45), 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .entete-nav {
@@ -686,10 +709,10 @@ h1, h2, h3 {
   overflow: hidden;
 }
 
-.apropos-visuel img {
+.illustration-chantier {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
+  height: auto;
 }
 
 .apropos-zone {
@@ -1402,6 +1425,19 @@ a.coordonnee:hover span {
   color: var(--blanc);
 }
 
+.pied-contact {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--texte-inverse-doux);
+}
+
+.pied-contact svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--bleu-ciel);
+}
+
 .pied-bas {
   border-top: 1px solid var(--ligne-sombre);
 }
@@ -1692,7 +1728,7 @@ a.coordonnee:hover span {
     transition-delay: 0ms !important;
   }
   .apparition,
-  .devoilement,
+  .devoilement > *,
   .devoilement img {
     opacity: 1;
     transform: none;
