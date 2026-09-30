@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PageLegaleLayout from '../../components/public/PageLegaleLayout';
 import { COORDONNEES, coordonneeOuPlaceholder } from '../../utils/coordonnees';
 import { obtenirCoordonneesPubliques } from '../../service/coordonneesService';
@@ -49,7 +50,7 @@ export default function MentionsLegalesPage() {
       <h2>Données personnelles</h2>
       <p>
         Les informations transmises via le formulaire de devis sont utilisées uniquement pour traiter votre
-        demande. Voir notre <a href="/politique-de-confidentialite">politique de confidentialité</a>.
+        demande. Voir notre <Link to="/politique-de-confidentialite">politique de confidentialité</Link>.
       </p>
     </PageLegaleLayout>
   );

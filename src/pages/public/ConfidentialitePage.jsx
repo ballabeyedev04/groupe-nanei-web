@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import PageLegaleLayout from '../../components/public/PageLegaleLayout';
 
 export default function ConfidentialitePage() {
@@ -26,7 +27,7 @@ export default function ConfidentialitePage() {
       <p>
         Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos
         données. Pour l'exercer, contactez-nous via les coordonnées indiquées sur la page{' '}
-        <a href="/mentions-legales">mentions légales</a>.
+        <Link to="/mentions-legales">mentions légales</Link>.
       </p>
 
       <h2>Cookies</h2>

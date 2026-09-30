@@ -1,3 +1,5 @@
+import monogramme from '../../assets/img/logo-gn.webp';
+
 // Aucun fichier logo vectoriel n'a été fourni par le client (les visuels
 // reçus sont soit des rendus 3D en photo, soit des mockups de page entière —
 // rien d'utilisable comme logo isolé). Ce mark SVG reprend le style
@@ -42,6 +44,24 @@ export default function Logo({ variante = 'bleu', taille = 40 }) {
           }}
         >
           LOGISTIQUE DE CHANTIER
+        </span>
+      </span>
+    </span>
+  );
+}
+
+// Logo de l'en-tête : le monogramme "GN" fourni par le client (or et argent
+// sur fond sombre) accompagné du nom et de la signature "BTP • Logistique •
+// Services", mis en page comme sur le logo officiel mais en version compacte.
+export function LogoEntete({ taille = 44 }) {
+  return (
+    <span className="logo-entete">
+      <img src={monogramme} alt="" width={taille} height={taille} className="logo-entete-mark" />
+      <span className="logo-entete-texte">
+        <span className="logo-entete-groupe">Groupe</span>
+        <span className="logo-entete-nom">Nanei</span>
+        <span className="logo-entete-signature">
+          BTP <i aria-hidden="true">•</i> <b>Logistique</b> <i aria-hidden="true">•</i> Services
         </span>
       </span>
     </span>

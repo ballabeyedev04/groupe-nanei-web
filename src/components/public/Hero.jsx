@@ -1,4 +1,4 @@
-import heroImg from '../../assets/img/hero.webp';
+import heroImg from '../../assets/img/hero-illustration.png';
 import { useDevisModal } from '../../context/DevisModalContext';
 import useCoordonnees from '../../hooks/useCoordonnees';
 import { ENGAGEMENTS, SERVICES, defilerVers } from '../../data/site';
@@ -48,10 +48,10 @@ export default function Hero() {
           <Apparition as="figure" devoilement className="hero-visuel">
             <img
               src={heroImg}
-              alt="Logisticien Groupe Nanei coordonnant la circulation des véhicules à l'entrée d'un chantier"
+              alt="Les étapes de la logistique de chantier : accès contrôlé, réception des livraisons, bennes et tri des déchets, évacuation pour un site propre"
               fetchPriority="high"
-              width="792"
-              height="556"
+              width="1122"
+              height="294"
             />
             <figcaption className="hero-legende">
               <strong>Zone d'intervention</strong>

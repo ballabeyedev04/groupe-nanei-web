@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Logo from './Logo';
+import Logo, { LogoEntete } from './Logo';
 import Icone from '../ui/Icone';
 import { useDevisModal } from '../../context/DevisModalContext';
 import useDefilementDepasse from '../../hooks/useDefilement';
@@ -51,7 +51,7 @@ export default function Header() {
     <header className={`entete ${defile ? 'entete--defile' : ''}`}>
       <div className="conteneur entete-ligne">
         <a href="#accueil" onClick={(e) => allerA(e, '#accueil')} style={{ textDecoration: 'none' }} aria-label="Groupe Nanei — retour à l'accueil">
-          <Logo taille={36} />
+          <LogoEntete />
         </a>
 
         <nav className="entete-nav" aria-label="Navigation principale">
