@@ -1,50 +1,40 @@
-import collageImg from '../../assets/img/collage-services.jpg';
-import equipeImg from '../../assets/img/equipe.jpg';
-import equipeTabletteImg from '../../assets/img/equipe-tablette.jpg';
-import gestionBennesImg from '../../assets/img/gestion-bennes.jpg';
-import tracabiliteImg from '../../assets/img/tracabilite.jpg';
+import bennesImg from '../../assets/img/bennes.webp';
+import equipeTabletteImg from '../../assets/img/equipe-tablette.webp';
+import tracabiliteImg from '../../assets/img/tracabilite.webp';
+import EnTeteSection from '../ui/EnTeteSection';
 import Apparition from '../ui/Apparition';
 
-// Le cahier §9 fournit une galerie de visuels de marque plutôt que des
-// couples avant/après chantier par chantier (aucun chantier nommé n'a été
-// validé pour publication — cahier §8 : "ne pas publier [...] de références
-// clients fictifs"). Les légendes reprennent le vocabulaire du §7 "Plan des
-// images à prévoir" plutôt que d'inventer des noms de chantiers ou de clients.
+// Aucun chantier nommé n'a été validé pour publication (cahier §8 : "ne pas
+// publier [...] de références clients fictifs") : les légendes décrivent
+// les situations de terrain, sans inventer de noms de chantiers ou de
+// clients. L'ordre compte : la mosaïque (index.css) donne au 1er visuel le
+// grand format. Chaque photo n'apparaît qu'une fois sur la page.
 const PHOTOS = [
-  { src: collageImg, legende: "Suivi des bennes, organisation des flux et esprit d'équipe", type: 'Gestion des bennes · Gestion du trafic' },
-  { src: gestionBennesImg, legende: 'Logisticien coordonnant une benne de chantier, zone propre et signalisation visible', type: 'Gestion des bennes' },
-  { src: equipeTabletteImg, legende: 'Logisticiens Groupe Nanei coordonnant leurs interventions sur chantier', type: 'Organisation & sécurité logistique' },
-  { src: equipeImg, legende: '2 à 5 logisticiens Groupe Nanei en EPI réunis sur chantier, esprit d’équipe', type: 'Esprit d’équipe' },
-  { src: tracabiliteImg, legende: 'Suivi et traçabilité des bennes de chantier', type: 'Gestion des bennes' },
+  { src: equipeTabletteImg, l: 1400, h: 606, type: 'Coordination', legende: 'Point d’équipe avant le lancement des rotations de bennes' },
+  { src: bennesImg, l: 1200, h: 960, type: 'Gestion des bennes', legende: 'Contrôle du remplissage et maintien d’une zone déchets propre' },
+  { src: tracabiliteImg, l: 815, h: 484, type: 'Traçabilité', legende: 'Suivi des bennes : emplacement, statut et date d’enlèvement' },
 ];
 
 export default function Realisations() {
   return (
-    <section id="realisations" style={{ padding: '72px 0', background: 'var(--bleu-ciel-clair)' }}>
+    <section id="realisations" className="section section--papier" aria-labelledby="titre-realisations">
       <div className="conteneur">
-        <Apparition style={{ marginBottom: 36, maxWidth: 640 }}>
-          <span className="etiquette-section">Nos réalisations en images</span>
-          <h2 className="titre-section">Groupe Nanei sur le terrain</h2>
-        </Apparition>
+        <EnTeteSection
+          id="titre-realisations"
+          etiquette="Sur le terrain"
+          titre="Groupe Nanei, au quotidien sur vos chantiers"
+          intro="Coordination des équipes, gestion des bennes, traçabilité : un aperçu du travail de nos logisticiens sur site."
+          scinde
+        />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 18 }}>
+        <div className="mosaique">
           {PHOTOS.map((p, i) => (
-            <Apparition key={p.src} delai={(i % 4) * 90} effet="zoom">
-              <figure
-                className="carte-animee image-zoom"
-                style={{ margin: 0, borderRadius: 'var(--rayon)', overflow: 'hidden', background: '#fff', boxShadow: 'var(--ombre)' }}
-              >
-                <div className="photo-realisation">
-                  <img src={p.src} alt={p.legende} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover' }} />
-                  <div className="voile" />
-                </div>
-                <figcaption style={{ padding: '12px 16px' }}>
-                  <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--bleu-action)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 3 }}>
-                    {p.type}
-                  </div>
-                  <div style={{ fontSize: 13.5, color: 'var(--texte-doux)', lineHeight: 1.45 }}>{p.legende}</div>
-                </figcaption>
-              </figure>
+            <Apparition as="figure" devoilement key={p.legende} delai={(i % 3) * 100} className="mosaique-element">
+              <img src={p.src} alt={p.legende} loading="lazy" width={p.l} height={p.h} />
+              <figcaption>
+                <span>{p.type}</span>
+                <p>{p.legende}</p>
+              </figcaption>
             </Apparition>
           ))}
         </div>

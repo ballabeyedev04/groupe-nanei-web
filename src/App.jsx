@@ -1,37 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './routes/ProtectedRoute';
 import VitrinePage from './pages/public/VitrinePage';
-import MentionsLegalesPage from './pages/public/MentionsLegalesPage';
-import ConfidentialitePage from './pages/public/ConfidentialitePage';
 import IntrouvablePage from './pages/public/IntrouvablePage';
-import LoginPage from './pages/admin/LoginPage';
-import AdminLayout from './layouts/AdminLayout';
-import DashboardPage from './pages/admin/DashboardPage';
-import DevisListPage from './pages/admin/DevisListPage';
-import ActualitesPage from './pages/admin/ActualitesPage';
-import CoordonneesPage from './pages/admin/CoordonneesPage';
+
+// Seule la vitrine est chargée d'emblée : pages légales et back-office sont
+// découpés en fichiers séparés, téléchargés uniquement quand on les ouvre.
+// Le visiteur du site ne télécharge donc jamais le code de l'admin.
+const MentionsLegalesPage = lazy(() => import('./pages/public/MentionsLegalesPage'));
+const ConfidentialitePage = lazy(() => import('./pages/public/ConfidentialitePage'));
+const Admin = lazy(() => import('./routes/AdminRoutes'));
 
 export default function App() {
   return (
-    <AuthProvider>
+    <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<VitrinePage />} />
         <Route path="/mentions-legales" element={<MentionsLegalesPage />} />
         <Route path="/politique-de-confidentialite" element={<ConfidentialitePage />} />
-
-        <Route path="/admin/login" element={<LoginPage />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="devis" element={<DevisListPage />} />
-            <Route path="actualites" element={<ActualitesPage />} />
-            <Route path="coordonnees" element={<CoordonneesPage />} />
-          </Route>
-        </Route>
-
+        <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<IntrouvablePage />} />
       </Routes>
-    </AuthProvider>
+    </Suspense>
   );
 }

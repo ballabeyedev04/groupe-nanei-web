@@ -1,68 +1,66 @@
-import { useEffect, useState } from 'react';
-import { useDevisModal } from '../../context/DevisModalContext';
-import { COORDONNEES } from '../../utils/coordonnees';
-import { obtenirCoordonneesPubliques } from '../../service/coordonneesService';
+import useCoordonnees from '../../hooks/useCoordonnees';
 import Apparition from '../ui/Apparition';
+import Icone from '../ui/Icone';
+import DevisFormulaire from './DevisFormulaire';
 
-function LignePlaceholder({ children, present }) {
-  return <span style={{ opacity: present ? 1 : 0.65, fontStyle: present ? 'normal' : 'italic' }}>{children}</span>;
-}
-
-function LigneContact({ icone, href, children }) {
-  if (!href) {
-    return <div className="lien-contact"><span>{icone}</span>{children}</div>;
-  }
-  return <a className="lien-contact" href={href}><span>{icone}</span>{children}</a>;
+// Une ligne de coordonnées, cliquable (appel / e-mail) quand `href` est
+// fourni. Une coordonnée non encore renseignée dans l'admin n'est pas
+// affichée du tout, plutôt qu'avec un texte d'attente.
+function Coordonnee({ icone, libelle, valeur, href }) {
+  if (!valeur) return null;
+  const contenu = (
+    <>
+      <Icone nom={icone} />
+      <div>
+        <small>{libelle}</small>
+        <span>{valeur}</span>
+      </div>
+    </>
+  );
+  return (
+    <li>
+      {href ? <a className="coordonnee" href={href}>{contenu}</a> : <div className="coordonnee">{contenu}</div>}
+    </li>
+  );
 }
 
 export default function ContactSection() {
-  const { ouvrir } = useDevisModal();
-  // Valeurs par défaut = coordonnees.js (placeholders "à renseigner") tant
-  // que l'appel réseau n'a pas répondu ou que rien n'est encore configuré
-  // côté admin — jamais un flash de contenu vide.
-  const [coordonnees, setCoordonnees] = useState({ telephone: COORDONNEES.telephone, email: COORDONNEES.email, adresse: '' });
-
-  useEffect(() => {
-    obtenirCoordonneesPubliques()
-      .then((c) => setCoordonnees({ telephone: c.telephone || '', email: c.email || '', adresse: c.adresse || '' }))
-      .catch(() => {}); // silencieux : les placeholders restent affichés
-  }, []);
+  const { telephone, email, adresse, zone } = useCoordonnees();
 
   return (
-    <section id="contact" className="methode" style={{ padding: '72px 0' }}>
-      <div
-        className="conteneur"
-        style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: 32, alignItems: 'center', justifyContent: 'space-between' }}
-      >
-        <Apparition effet="gauche" style={{ maxWidth: 460 }}>
-          <h2 style={{ margin: '0 0 10px', fontSize: 26, fontWeight: 800, color: '#fff' }}>Discutons de votre projet</h2>
-          <p style={{ margin: 0, color: '#CFEAFF', lineHeight: 1.6 }}>
-            Notre équipe est à votre écoute pour vous proposer une solution adaptée à vos besoins.
-          </p>
-          <button type="button" onClick={ouvrir} className="bouton bouton--plein" style={{ marginTop: 20 }}>
-            Demander un devis <span className="fleche">→</span>
-          </button>
-        </Apparition>
+    <section id="contact" className="section section--papier" aria-labelledby="titre-contact">
+      <div className="conteneur">
+        <Apparition className="contact-grille">
+          <div className="contact-infos">
+            <span className="etiquette-section" style={{ color: 'var(--bleu-ciel)' }}>Contact</span>
+            <h2 id="titre-contact">Discutons de votre projet</h2>
+            <p>Notre équipe est à votre écoute pour vous proposer une solution adaptée à votre chantier.</p>
 
-        <Apparition delai={120} effet="droite" style={{ display: 'grid', gap: 12, color: '#fff', fontSize: 14.5, minWidth: 280 }}>
-          {/* Téléphone et e-mail deviennent cliquables (appel / mail direct)
-              dès qu'ils sont renseignés côté admin. */}
-          <LigneContact icone="📞" href={coordonnees.telephone && `tel:${coordonnees.telephone.replace(/\s+/g, '')}`}>
-            <LignePlaceholder present={!!coordonnees.telephone}>
-              {coordonnees.telephone || 'Téléphone à renseigner'}
-            </LignePlaceholder>
-          </LigneContact>
-          <LigneContact icone="✉️" href={coordonnees.email && `mailto:${coordonnees.email}`}>
-            <LignePlaceholder present={!!coordonnees.email}>
-              {coordonnees.email || 'E-mail à renseigner'}
-            </LignePlaceholder>
-          </LigneContact>
-          <div className="lien-contact">
-            <span>📍</span>
-            {/* L'adresse précise (si configurée) prend le pas sur la zone
-                d'intervention générique — les deux ne sont jamais affichées
-                à vide en même temps. */}
-            <LignePlaceholder present>{coordonnees.adresse || COORDONNEES.zoneIntervention}</LignePlaceholder>
+            <ul className="coordonnees">
+              <Coordonnee
+                icone="telephone"
+                libelle="Téléphone"
+                valeur={telephone}
+                href={telephone && `tel:${telephone.replace(/\s+/g, '')}`}
+              />
+              <Coordonnee
+                icone="email"
+                libelle="E-mail"
+                valeur={email}
+                href={email && `mailto:${email}`}
+              />
+              <Coordonnee icone="lieu" libelle={adresse ? 'Adresse' : "Zone d'intervention"} valeur={adresse || zone} />
+            </ul>
+
+            <p className="contact-note">
+              Vous pouvez aussi nous écrire via le formulaire : chaque demande est lue et traitée par notre équipe.
+            </p>
+          </div>
+
+          <div className="contact-formulaire">
+            <h3>Demande de devis</h3>
+            <p>Quelques informations sur votre chantier suffisent pour que nous revenions vers vous.</p>
+            <DevisFormulaire />
           </div>
         </Apparition>
       </div>

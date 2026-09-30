@@ -1,33 +1,34 @@
 import useEnVue from '../../hooks/useEnVue';
 
-// Position de départ de chaque effet, avant l'entrée dans le viewport.
-const EFFETS = {
-  haut: 'translateY(28px)',
-  gauche: 'translateX(-40px)',
-  droite: 'translateX(40px)',
-  zoom: 'scale(0.92)',
-};
-
-// Enveloppe générique : fait apparaître son contenu en fondu + mouvement
-// (glissement vers le haut par défaut, ou depuis la gauche / la droite, ou
-// zoom) dès qu'il entre dans le viewport. `delai` (ms) permet un effet "en
-// cascade" sur une liste de cartes (voir Services, PourquoiChoisir, Realisations).
-export default function Apparition({ children, delai = 0, effet = 'haut', style, ...props }) {
+// Fait apparaître son contenu (fondu + léger glissement) à l'entrée dans le
+// viewport. `devoilement` remplace l'effet par une ouverture du cadre, pour
+// les images. `delai` (ms) permet un léger décalage entre éléments voisins.
+// Le rendu reste un élément HTML au choix (`as`) pour ne pas multiplier les
+// <div> inutiles autour des listes, figures, etc.
+export default function Apparition({
+  as: Balise = 'div',
+  children,
+  delai = 0,
+  devoilement = false,
+  className = '',
+  style,
+  ...props
+}) {
   const [ref, visible] = useEnVue();
-  const courbe = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const classes = [
+    devoilement ? 'devoilement' : 'apparition',
+    visible ? 'apparition--visible' : '',
+    className,
+  ].filter(Boolean).join(' ');
 
   return (
-    <div
+    <Balise
       ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'none' : EFFETS[effet] ?? EFFETS.haut,
-        transition: `opacity 0.8s ${courbe} ${delai}ms, transform 0.8s ${courbe} ${delai}ms`,
-        ...style,
-      }}
+      className={classes}
+      style={delai ? { transitionDelay: `${delai}ms`, ...style } : style}
       {...props}
     >
       {children}
-    </div>
+    </Balise>
   );
 }

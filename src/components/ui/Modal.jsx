@@ -1,19 +1,35 @@
-import { useEffect } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import Icone from './Icone';
 
 export default function Modal({ ouvert, onFermer, titre, children, largeur = 520 }) {
+  const idTitre = useId();
+  const refBoite = useRef(null);
+  // Dernière version de `onFermer` : l'effet ci-dessous ne dépend ainsi que
+  // de `ouvert`, et ne relance pas le focus si le parent passe une fonction
+  // recréée à chaque rendu.
+  const refFermer = useRef(onFermer);
+  useEffect(() => {
+    refFermer.current = onFermer;
+  });
+
   useEffect(() => {
     if (!ouvert) return undefined;
+    const focusPrecedent = document.activeElement;
     function surEchap(e) {
-      if (e.key === 'Escape') onFermer();
+      if (e.key === 'Escape') refFermer.current();
     }
     document.addEventListener('keydown', surEchap);
     document.body.style.overflow = 'hidden';
+    // Le focus passe dans la modale à l'ouverture et revient sur le bouton
+    // d'origine à la fermeture (navigation clavier).
+    refBoite.current?.querySelector('input, select, textarea, button')?.focus();
     return () => {
       document.removeEventListener('keydown', surEchap);
       document.body.style.overflow = '';
+      focusPrecedent?.focus?.();
     };
-  }, [ouvert, onFermer]);
+  }, [ouvert]);
 
   if (!ouvert) return null;
 
@@ -22,35 +38,42 @@ export default function Modal({ ouvert, onFermer, titre, children, largeur = 520
       role="presentation"
       onMouseDown={(e) => { if (e.target === e.currentTarget) onFermer(); }}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(7,32,56,0.55)',
+        position: 'fixed', inset: 0, background: 'rgba(4, 38, 72, 0.6)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 20, zIndex: 100,
+        padding: 16, zIndex: 100,
       }}
     >
       <div
+        ref={refBoite}
         role="dialog"
         aria-modal="true"
-        aria-label={titre}
+        aria-labelledby={idTitre}
         style={{
-          background: '#fff', borderRadius: 18, width: '100%', maxWidth: largeur,
-          maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 24px 60px rgba(7,32,56,0.35)',
+          background: '#fff', borderRadius: 'var(--rayon)', width: '100%', maxWidth: largeur,
+          maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 30px 80px rgba(4, 38, 72, 0.35)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 0' }}>
-          <h2 style={{ margin: 0, fontSize: 19, fontWeight: 800, color: 'var(--bleu-marine)' }}>{titre}</h2>
+        <div
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
+            padding: '24px 32px', borderBottom: '1px solid var(--ligne)',
+          }}
+        >
+          <h2 id={idTitre} style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.01em' }}>{titre}</h2>
           <button
             type="button"
             onClick={onFermer}
             aria-label="Fermer"
             style={{
-              width: 34, height: 34, borderRadius: 10, border: 'none', background: 'var(--bleu-ciel-clair)',
-              cursor: 'pointer', fontSize: 16, color: 'var(--bleu-marine)',
+              width: 40, height: 40, borderRadius: 'var(--rayon)', border: '1px solid var(--ligne)',
+              background: '#fff', cursor: 'pointer', color: 'var(--bleu-marine)',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}
           >
-            ✕
+            <Icone nom="fermer" />
           </button>
         </div>
-        <div style={{ padding: 24 }}>{children}</div>
+        <div style={{ padding: '24px 32px 32px' }}>{children}</div>
       </div>
     </div>,
     document.body

@@ -1,32 +1,21 @@
 import { useEffect, useState } from 'react';
 import Logo from './Logo';
+import Icone from '../ui/Icone';
 import { useDevisModal } from '../../context/DevisModalContext';
-import useDefilement from '../../hooks/useDefilement';
-
-const LIENS = [
-  { href: '#accueil', label: 'Accueil' },
-  { href: '#a-propos', label: 'À propos' },
-  { href: '#services', label: 'Nos services' },
-  { href: '#methode', label: 'Notre méthode' },
-  { href: '#realisations', label: 'Nos réalisations' },
-  { href: '#engagements', label: 'Engagements' },
-  { href: '#actualites', label: 'Actualités' },
-  { href: '#contact', label: 'Contact' },
-];
+import useDefilementDepasse from '../../hooks/useDefilement';
+import useCoordonnees from '../../hooks/useCoordonnees';
+import { NAVIGATION, defilerVers, numeroter } from '../../data/site';
 
 export default function Header() {
   const [menuOuvert, setMenuOuvert] = useState(false);
-  const [sectionActive, setSectionActive] = useState('#accueil');
+  const [sectionActive, setSectionActive] = useState('');
+  const defile = useDefilementDepasse(12);
   const { ouvrir } = useDevisModal();
-  const scrolle = useDefilement().y > 20;
+  const { telephone, email, zone } = useCoordonnees();
 
-  // Scrollspy léger : surligne dans le menu la section actuellement à
-  // l'écran, sans dépendance externe — juste un IntersectionObserver par
-  // section (cahier §6 : transitions discrètes, pas d'effet lourd).
+  // Scrollspy : surligne dans le menu la section actuellement à l'écran.
   useEffect(() => {
-    const sections = LIENS.map((l) => document.querySelector(l.href)).filter(Boolean);
-    if (sections.length === 0) return undefined;
-
+    const sections = NAVIGATION.map((l) => document.querySelector(l.href)).filter(Boolean);
     const observateur = new IntersectionObserver(
       (entrees) => {
         const visible = entrees.find((e) => e.isIntersecting);
@@ -38,128 +27,108 @@ export default function Header() {
     return () => observateur.disconnect();
   }, []);
 
-  function allerA(href) {
+  // Menu mobile : bloque le défilement de la page et se ferme avec Échap.
+  useEffect(() => {
+    if (!menuOuvert) return undefined;
+    function surEchap(e) {
+      if (e.key === 'Escape') setMenuOuvert(false);
+    }
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', surEchap);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', surEchap);
+    };
+  }, [menuOuvert]);
+
+  function allerA(e, href) {
+    e.preventDefault();
     setMenuOuvert(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    defilerVers(href);
   }
 
   return (
-    <header
-      className={`entete ${scrolle ? 'entete--scrolle' : ''}`}
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        background: 'rgba(255,255,255,0.92)',
-        backdropFilter: 'blur(6px)',
-        borderBottom: '1px solid var(--bordure)',
-      }}
-    >
-      <div
-        className="conteneur entete-ligne"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, height: 76 }}
-      >
-        <a
-          href="#accueil"
-          onClick={(e) => { e.preventDefault(); allerA('#accueil'); }}
-          style={{ textDecoration: 'none', flexShrink: 0 }}
-        >
-          <Logo taille={38} />
+    <header className={`entete ${defile ? 'entete--defile' : ''}`}>
+      <div className="conteneur entete-ligne">
+        <a href="#accueil" onClick={(e) => allerA(e, '#accueil')} style={{ textDecoration: 'none' }} aria-label="Groupe Nanei — retour à l'accueil">
+          <Logo taille={36} />
         </a>
 
-        <nav
-          style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'nowrap' }}
-          className="nav-desktop"
-        >
-          {LIENS.map((lien) => (
+        <nav className="entete-nav" aria-label="Navigation principale">
+          {NAVIGATION.map((lien) => (
             <a
               key={lien.href}
               href={lien.href}
-              onClick={(e) => { e.preventDefault(); allerA(lien.href); }}
+              onClick={(e) => allerA(e, lien.href)}
               className={`lien-nav ${sectionActive === lien.href ? 'lien-nav--actif' : ''}`}
-              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap' }}
+              aria-current={sectionActive === lien.href ? 'true' : undefined}
             >
               {lien.label}
             </a>
           ))}
         </nav>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-          <button
-            type="button"
-            onClick={ouvrir}
-            className="bouton bouton--plein hidden-mobile"
-          >
-            Demander un devis <span className="fleche">→</span>
+        <div className="entete-actions">
+          <button type="button" onClick={ouvrir} className="bouton bouton--plein">
+            Demander un devis
           </button>
           <button
             type="button"
-            aria-label="Ouvrir le menu"
-            onClick={() => setMenuOuvert((v) => !v)}
             className="bouton-menu"
-            style={{
-              display: 'none',
-              width: 42,
-              height: 42,
-              borderRadius: 10,
-              border: '1px solid var(--bordure)',
-              background: 'var(--blanc)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-            }}
+            aria-expanded={menuOuvert}
+            aria-controls="menu-mobile"
+            onClick={() => setMenuOuvert(true)}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M2 5h16M2 10h16M2 15h16" stroke="#073B6F" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
+            Menu <Icone nom="menu" taille={22} />
           </button>
         </div>
       </div>
 
-      {menuOuvert && (
-        <div
-          className="menu-mobile"
-          style={{
-            borderTop: '1px solid var(--bordure)',
-            background: 'var(--blanc)',
-            padding: '16px 24px 22px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 14,
-          }}
-        >
-          {LIENS.map((lien) => (
+      <div
+        id="menu-mobile"
+        className={`menu-mobile ${menuOuvert ? 'menu-mobile--ouvert' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        aria-hidden={!menuOuvert}
+        inert={!menuOuvert}
+      >
+        <div className="menu-mobile-haut">
+          <Logo variante="blanc" taille={32} />
+          <button type="button" className="bouton-menu" onClick={() => setMenuOuvert(false)}>
+            Fermer <Icone nom="fermer" taille={22} />
+          </button>
+        </div>
+
+        <nav aria-label="Navigation mobile">
+          {NAVIGATION.map((lien, i) => (
             <a
               key={lien.href}
               href={lien.href}
-              onClick={(e) => { e.preventDefault(); allerA(lien.href); }}
-              style={{ textDecoration: 'none', color: 'var(--texte)', fontWeight: 600 }}
+              onClick={(e) => allerA(e, lien.href)}
+              style={{ transitionDelay: menuOuvert ? `${80 + i * 50}ms` : '0ms' }}
             >
+              <span>{numeroter(i)}</span>
               {lien.label}
             </a>
           ))}
+        </nav>
+
+        <div className="menu-mobile-pied">
           <button
             type="button"
             onClick={() => { setMenuOuvert(false); ouvrir(); }}
-            className="bouton bouton--plein"
-            style={{ justifyContent: 'center', marginTop: 6 }}
+            className="bouton bouton--blanc"
           >
-            Demander un devis <span className="fleche">→</span>
+            Demander un devis <Icone nom="fleche" />
           </button>
+          <div>
+            {telephone && <div><a href={`tel:${telephone.replace(/\s+/g, '')}`} style={{ color: '#fff' }}>{telephone}</a></div>}
+            {email && <div><a href={`mailto:${email}`} style={{ color: '#fff' }}>{email}</a></div>}
+            <div>{zone}</div>
+          </div>
         </div>
-      )}
-
-      <style>{`
-        /* Le menu complet (8 liens + logo + bouton) a besoin de place : on
-           bascule sur le menu mobile dès que ça commence à se resserrer,
-           plutôt que de laisser "Contact" coller au bouton "Demander un
-           devis" dans l'entre-deux. */
-        @media (max-width: 1220px) {
-          .nav-desktop { display: none !important; }
-          .hidden-mobile { display: none !important; }
-          .bouton-menu { display: inline-flex !important; }
-        }
-      `}</style>
+      </div>
     </header>
   );
 }
