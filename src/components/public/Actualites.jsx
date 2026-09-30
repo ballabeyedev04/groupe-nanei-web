@@ -57,7 +57,7 @@ export default function Actualites() {
                   Bientôt disponible
                 </h3>
                 <p style={{ margin: '0 auto', maxWidth: 460, color: 'var(--texte-doux)', fontSize: 14.5, lineHeight: 1.6 }}>
-                  Retrouverez ici prochainement l'actualité de Groupe Nanei : nouveaux chantiers accompagnés, retours
+                  Retrouvez ici prochainement l'actualité de Groupe Nanei : nouveaux chantiers accompagnés, retours
                   d'expérience et actualités de l'équipe. Pour toute question dès maintenant, contactez-nous
                   directement.
                 </p>

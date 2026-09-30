@@ -29,12 +29,15 @@ export default function Realisations() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: 18 }}>
           {PHOTOS.map((p, i) => (
-            <Apparition key={p.src} delai={(i % 4) * 80}>
+            <Apparition key={p.src} delai={(i % 4) * 90} effet="zoom">
               <figure
                 className="carte-animee image-zoom"
                 style={{ margin: 0, borderRadius: 'var(--rayon)', overflow: 'hidden', background: '#fff', boxShadow: 'var(--ombre)' }}
               >
-                <img src={p.src} alt={p.legende} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover' }} />
+                <div className="photo-realisation">
+                  <img src={p.src} alt={p.legende} loading="lazy" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover' }} />
+                  <div className="voile" />
+                </div>
                 <figcaption style={{ padding: '12px 16px' }}>
                   <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--bleu-action)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 3 }}>
                     {p.type}

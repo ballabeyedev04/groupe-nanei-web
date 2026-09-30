@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Logo from './Logo';
 import { useDevisModal } from '../../context/DevisModalContext';
+import useDefilement from '../../hooks/useDefilement';
 
 const LIENS = [
   { href: '#accueil', label: 'Accueil' },
@@ -17,6 +18,7 @@ export default function Header() {
   const [menuOuvert, setMenuOuvert] = useState(false);
   const [sectionActive, setSectionActive] = useState('#accueil');
   const { ouvrir } = useDevisModal();
+  const scrolle = useDefilement().y > 20;
 
   // Scrollspy léger : surligne dans le menu la section actuellement à
   // l'écran, sans dépendance externe — juste un IntersectionObserver par
@@ -43,6 +45,7 @@ export default function Header() {
 
   return (
     <header
+      className={`entete ${scrolle ? 'entete--scrolle' : ''}`}
       style={{
         position: 'sticky',
         top: 0,
@@ -53,7 +56,7 @@ export default function Header() {
       }}
     >
       <div
-        className="conteneur"
+        className="conteneur entete-ligne"
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, height: 76 }}
       >
         <a
@@ -87,7 +90,7 @@ export default function Header() {
             onClick={ouvrir}
             className="bouton bouton--plein hidden-mobile"
           >
-            Demander un devis →
+            Demander un devis <span className="fleche">→</span>
           </button>
           <button
             type="button"
@@ -141,7 +144,7 @@ export default function Header() {
             className="bouton bouton--plein"
             style={{ justifyContent: 'center', marginTop: 6 }}
           >
-            Demander un devis →
+            Demander un devis <span className="fleche">→</span>
           </button>
         </div>
       )}

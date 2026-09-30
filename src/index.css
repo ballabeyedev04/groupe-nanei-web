@@ -213,3 +213,426 @@ button {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   Animations enrichies — toutes neutralisées en bas de fichier si le
+   visiteur a demandé de réduire les animations (prefers-reduced-motion).
+   ========================================================================== */
+
+/* Barre de progression de lecture, en haut de page. */
+.barre-progression {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--bleu-action), #4fb3ff);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Header : s'ombre et se resserre légèrement une fois la page scrollée. */
+.entete {
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+.entete .entete-ligne {
+  transition: height 0.3s ease;
+}
+.entete--scrolle {
+  box-shadow: 0 8px 24px rgba(7, 59, 111, 0.08);
+  background: rgba(255, 255, 255, 0.97) !important;
+}
+.entete--scrolle .entete-ligne {
+  height: 64px !important;
+}
+
+.menu-mobile {
+  animation: glisser-bas 0.28s ease both;
+}
+
+/* Bouton principal : reflet lumineux qui traverse au survol. */
+.bouton--plein {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(10, 94, 168, 0.25);
+}
+.bouton--plein::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transition: left 0.6s ease;
+}
+.bouton--plein:hover::after {
+  left: 140%;
+}
+.bouton--plein:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(10, 94, 168, 0.32);
+}
+.bouton .fleche {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+.bouton:hover .fleche {
+  transform: translateX(4px);
+}
+
+/* Hero : formes floues qui dérivent lentement en arrière-plan. */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+.hero-bulle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+  animation: deriver 16s ease-in-out infinite alternate;
+}
+.hero-grille-deco {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(10, 94, 168, 0.12) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 75%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 75%);
+  pointer-events: none;
+}
+.hero-titre-accent {
+  background: linear-gradient(90deg, var(--bleu-action), #3aa0f0, var(--bleu-action));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: degrade-texte 6s linear infinite;
+}
+.flotte {
+  animation: flotter 6s ease-in-out infinite;
+}
+.flotte--lent {
+  animation-duration: 8s;
+  animation-delay: -3s;
+}
+.hero-badge {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-radius: 14px;
+  padding: 11px 15px;
+  box-shadow: 0 14px 34px rgba(7, 59, 111, 0.16);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bleu-marine);
+  white-space: nowrap;
+}
+.hero-badge small {
+  display: block;
+  font-weight: 500;
+  color: var(--texte-doux);
+  font-size: 11.5px;
+}
+.pastille-icone {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bleu-ciel-clair);
+  flex-shrink: 0;
+}
+.point-pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--succes);
+  flex-shrink: 0;
+}
+.point-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--succes);
+  animation: pulser 1.8s ease-out infinite;
+}
+.indicateur-scroll {
+  width: 24px;
+  height: 38px;
+  border: 2px solid rgba(7, 59, 111, 0.35);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+  margin: 0 auto;
+  cursor: pointer;
+  background: none;
+}
+.indicateur-scroll span {
+  width: 3px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--bleu-action);
+  animation: molette 1.8s ease-in-out infinite;
+}
+
+/* Bandeau défilant des services, sous le hero. */
+.bandeau {
+  background: var(--bleu-marine);
+  color: #fff;
+  overflow: hidden;
+  padding: 16px 0;
+}
+.bandeau-piste {
+  display: flex;
+  width: max-content;
+  animation: defiler 38s linear infinite;
+}
+.bandeau:hover .bandeau-piste {
+  animation-play-state: paused;
+}
+.bandeau-element {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 22px;
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.bandeau-element::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: #4fb3ff;
+  margin-left: 44px;
+}
+
+/* Cartes de services : icône qui s'inverse et liseré animé au survol. */
+.carte-service {
+  position: relative;
+  overflow: hidden;
+}
+.carte-service::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--bleu-action), #4fb3ff);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.carte-service:hover::before {
+  transform: scaleX(1);
+}
+.carte-service .icone-service {
+  transition: background 0.3s ease, transform 0.4s ease;
+}
+.carte-service .icone-service svg {
+  transition: stroke 0.3s ease;
+}
+.carte-service:hover .icone-service {
+  background: var(--bleu-action) !important;
+  transform: rotate(-6deg) scale(1.08);
+}
+.carte-service:hover .icone-service svg {
+  stroke: #fff;
+}
+
+/* Valeurs (À propos) : l'icône s'inverse au survol. */
+.icone-valeur {
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+.icone-valeur path {
+  transition: stroke 0.3s ease;
+}
+.valeur:hover .icone-valeur {
+  transform: translateY(-3px) rotate(-8deg);
+  background: var(--bleu-action) !important;
+}
+.valeur:hover .icone-valeur path {
+  stroke: #fff;
+}
+
+/* Méthode : section sombre, étapes reliées par une ligne qui se trace. */
+.methode {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 15% 0%, #0f5da6 0%, transparent 45%),
+    radial-gradient(circle at 90% 100%, #0b4f91 0%, transparent 40%), var(--bleu-marine);
+}
+.methode-ligne {
+  position: absolute;
+  top: 21px;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: rgba(207, 234, 255, 0.2);
+  overflow: hidden;
+}
+.methode-ligne span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #4fb3ff, #cfeaff);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
+}
+.methode-ligne--visible span {
+  transform: scaleX(1);
+}
+.etape-numero {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 6px rgba(79, 179, 255, 0.18);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.etape:hover .etape-numero {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 10px rgba(79, 179, 255, 0.22);
+}
+.etape-carte {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(207, 234, 255, 0.14);
+  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+.etape:hover .etape-carte {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(207, 234, 255, 0.3);
+}
+
+/* Engagements : numéros en dégradé, décalage au survol. */
+.point-engagement {
+  padding: 14px 16px;
+  border-radius: 12px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.point-engagement:hover {
+  background: var(--bleu-ciel-clair);
+  transform: translateX(6px);
+}
+.numero-degrade {
+  background: linear-gradient(135deg, var(--bleu-action), #7cc6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Réalisations : voile dégradé au survol. */
+.photo-realisation {
+  position: relative;
+  overflow: hidden;
+}
+.photo-realisation .voile {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(7, 59, 111, 0.5));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.carte-animee:hover .photo-realisation .voile {
+  opacity: 1;
+}
+
+/* Bouton retour en haut. */
+.retour-haut {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bleu-action);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(10, 94, 168, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+}
+.retour-haut:hover {
+  background: var(--bleu-action-hover);
+}
+
+/* Coordonnées (section contact) : cartes cliquables. */
+.lien-contact {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(207, 234, 255, 0.14);
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+a.lien-contact:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(4px);
+}
+
+@keyframes deriver {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.15); }
+}
+@keyframes flotter {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes degrade-texte {
+  to { background-position: 200% center; }
+}
+@keyframes pulser {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(3); opacity: 0; }
+}
+@keyframes molette {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+@keyframes defiler {
+  to { transform: translateX(-50%); }
+}
+@keyframes glisser-bas {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 880px) {
+  .hero-badge,
+  .methode-ligne,
+  .indicateur-scroll {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

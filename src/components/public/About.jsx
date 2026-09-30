@@ -15,6 +15,7 @@ const VALEURS = [
 function IconeValeur() {
   return (
     <span
+      className="icone-valeur"
       style={{
         width: 40, height: 40, borderRadius: 10, background: 'var(--bleu-ciel-clair)',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
@@ -32,7 +33,7 @@ export default function About() {
     <section id="a-propos" style={{ padding: '72px 0' }}>
       <div className="conteneur">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.85fr', gap: 48, alignItems: 'center', marginBottom: 44 }}>
-          <Apparition>
+          <Apparition effet="gauche">
             <span className="etiquette-section">À propos de Groupe Nanei</span>
             <h2 className="titre-section">Un partenaire de confiance pour vos chantiers</h2>
             <p style={{ fontSize: 16, color: 'var(--texte-doux)', lineHeight: 1.7 }}>
@@ -53,31 +54,34 @@ export default function About() {
               📍 Intervention : {COORDONNEES.zoneIntervention}
             </span>
           </Apparition>
-          <Apparition delai={120}>
+          <Apparition delai={120} effet="droite" className="image-zoom" style={{ borderRadius: 'var(--rayon)', boxShadow: 'var(--ombre)' }}>
             <img
               src={aboutImg}
               alt="Logisticien Groupe Nanei consultant une tablette sur un chantier"
               loading="lazy"
-              style={{ width: '100%', borderRadius: 'var(--rayon)', boxShadow: 'var(--ombre)', aspectRatio: '4/3.2', objectFit: 'cover' }}
+              style={{ width: '100%', aspectRatio: '4/3.2', objectFit: 'cover' }}
             />
           </Apparition>
         </div>
 
-        <Apparition>
+        <Apparition effet="zoom">
           <div
             style={{
-              background: 'var(--bleu-marine)',
+              position: 'relative',
+              overflow: 'hidden',
+              background: 'linear-gradient(120deg, var(--bleu-marine), var(--bleu-marine-clair))',
               borderRadius: 'var(--rayon)',
               padding: '30px 34px',
               color: '#fff',
               marginBottom: 44,
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--bleu-ciel)' }}>NOTRE PROMESSE</span>
-            <h3 style={{ margin: '8px 0 10px', fontSize: 22, fontWeight: 800 }}>
+            <div className="hero-bulle" style={{ width: 260, height: 260, background: '#1f7fd1', top: -120, right: -60, opacity: 0.45 }} />
+            <span style={{ position: 'relative', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--bleu-ciel)' }}>NOTRE PROMESSE</span>
+            <h3 style={{ position: 'relative', margin: '8px 0 10px', fontSize: 22, fontWeight: 800 }}>
               Des chantiers mieux organisés, plus sûrs et plus efficaces.
             </h3>
-            <p style={{ margin: 0, color: '#DCEEFF', lineHeight: 1.65, maxWidth: 720 }}>
+            <p style={{ position: 'relative', margin: 0, color: '#DCEEFF', lineHeight: 1.65, maxWidth: 720 }}>
               Une logistique maîtrisée réduit les pertes de temps, limite les encombrements, améliore la circulation
               et contribue directement à la qualité d'exécution du chantier.
             </p>
@@ -86,7 +90,7 @@ export default function About() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 20 }}>
           {VALEURS.map((v, i) => (
-            <Apparition key={v.titre} delai={i * 80} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+            <Apparition key={v.titre} delai={i * 80} className="valeur" style={{ display: 'flex', gap: 14, alignItems: 'flex-start', cursor: 'default' }}>
               <IconeValeur />
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--bleu-marine)', marginBottom: 4 }}>{v.titre}</div>

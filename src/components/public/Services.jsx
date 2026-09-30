@@ -58,9 +58,9 @@ export default function Services() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 22 }}>
           {SERVICES.map((s, i) => (
-            <Apparition key={s.titre} delai={(i % 4) * 80}>
+            <Apparition key={s.titre} delai={(i % 4) * 90} effet="zoom">
               <div
-                className="carte-animee"
+                className="carte-animee carte-service"
                 style={{
                   background: 'var(--blanc)',
                   borderRadius: 'var(--rayon)',
@@ -70,6 +70,7 @@ export default function Services() {
                 }}
               >
                 <span
+                  className="icone-service"
                   style={{
                     width: 48, height: 48, borderRadius: 12, background: 'var(--bleu-ciel-clair)',
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,

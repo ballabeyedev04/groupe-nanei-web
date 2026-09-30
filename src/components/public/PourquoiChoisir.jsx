@@ -29,10 +29,10 @@ export default function PourquoiChoisir() {
             </p>
           </Apparition>
 
-          <div style={{ display: 'grid', gap: 22 }}>
+          <div style={{ display: 'grid', gap: 6 }}>
             {POINTS.map((p, i) => (
-              <Apparition key={p.n} delai={i * 70} style={{ display: 'flex', gap: 18 }}>
-                <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--bleu-ciel)', width: 40, flexShrink: 0 }}>{p.n}</span>
+              <Apparition key={p.n} delai={i * 90} effet="gauche" className="point-engagement" style={{ display: 'flex', gap: 18 }}>
+                <span className="numero-degrade" style={{ fontSize: 26, fontWeight: 800, width: 44, flexShrink: 0, lineHeight: 1.1 }}>{p.n}</span>
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--bleu-marine)' }}>{p.titre}</div>
                   <div style={{ fontSize: 14, color: 'var(--texte-doux)' }}>{p.texte}</div>
@@ -44,8 +44,11 @@ export default function PourquoiChoisir() {
 
         <Apparition
           delai={150}
+          effet="droite"
           style={{
-            background: 'var(--bleu-action)',
+            overflow: 'hidden',
+            background: 'linear-gradient(145deg, var(--bleu-action), var(--bleu-marine))',
+            boxShadow: '0 24px 50px rgba(10, 94, 168, 0.3)',
             borderRadius: 'var(--rayon)',
             padding: '34px 30px',
             color: '#fff',
