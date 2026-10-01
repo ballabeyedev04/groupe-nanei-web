@@ -735,10 +735,28 @@ h1, h2, h3 {
   margin: 0 0 20px;
 }
 
-.promesse {
-  margin: 48px 0 0;
-  padding: 36px 0 0;
+.promesse-bloc {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: 96px;
+  align-items: center;
+  margin-top: 96px;
+  padding-top: 96px;
   border-top: 1px solid var(--ligne);
+}
+
+.promesse-visuel {
+  margin: 0;
+}
+
+.illustration-promesse {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.promesse {
+  margin: 0;
 }
 
 .promesse blockquote {
@@ -1486,6 +1504,7 @@ a.coordonnee:hover span {
     padding: 100px 0;
   }
   .apropos-grille,
+  .promesse-bloc,
   .services-grille,
   .engagements-grille {
     gap: 64px;
@@ -1541,6 +1560,7 @@ a.coordonnee:hover span {
   }
   .entete-section--scindee,
   .apropos-grille,
+  .promesse-bloc,
   .services-grille,
   .engagements-grille,
   .appel-grille,
@@ -1551,9 +1571,18 @@ a.coordonnee:hover span {
     gap: 20px;
   }
   .apropos-grille,
+  .promesse-bloc,
   .services-grille,
   .engagements-grille {
     gap: 48px;
+  }
+  .promesse-bloc {
+    margin-top: 64px;
+    padding-top: 64px;
+  }
+  .illustration-promesse {
+    max-width: 480px;
+    margin: 0 auto;
   }
   .apropos-visuel img {
     aspect-ratio: 16 / 11;

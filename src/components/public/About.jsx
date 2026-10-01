@@ -3,6 +3,7 @@ import { numeroter } from '../../data/site';
 import Apparition from '../ui/Apparition';
 import Icone from '../ui/Icone';
 import IllustrationChantier from './IllustrationChantier';
+import IllustrationPromesse from './IllustrationPromesse';
 
 // Contenu repris du cahier §3 "À propos de Groupe Nanei" — présentation,
 // promesse et les 5 valeurs. Les valeurs sont présentées en colonnes
@@ -50,16 +51,24 @@ export default function About() {
                 pendant que nous assurons une logistique rigoureuse, réactive et adaptée aux contraintes du chantier.
               </p>
             </Apparition>
-
-            <Apparition as="figure" className="promesse" delai={160}>
-              <span className="etiquette-section">Notre promesse</span>
-              <blockquote>Des chantiers mieux organisés, plus sûrs et plus efficaces.</blockquote>
-              <p>
-                Une logistique maîtrisée réduit les pertes de temps, limite les encombrements, améliore la
-                circulation et contribue directement à la qualité d'exécution du chantier.
-              </p>
-            </Apparition>
           </div>
+        </div>
+
+        {/* Promesse sur sa propre ligne, illustration à gauche : en colonne
+            de droite, elle laissait un grand vide sous l'illustration. */}
+        <div className="promesse-bloc">
+          <Apparition as="figure" devoilement className="promesse-visuel">
+            <IllustrationPromesse titre="Une checklist cochée, un bouclier de sécurité, un chronomètre et une courbe montante : des chantiers organisés, sûrs et efficaces" />
+          </Apparition>
+
+          <Apparition as="figure" className="promesse" delai={120}>
+            <span className="etiquette-section">Notre promesse</span>
+            <blockquote>Des chantiers mieux organisés, plus sûrs et plus efficaces.</blockquote>
+            <p>
+              Une logistique maîtrisée réduit les pertes de temps, limite les encombrements, améliore la
+              circulation et contribue directement à la qualité d'exécution du chantier.
+            </p>
+          </Apparition>
         </div>
 
         <ul className="valeurs" aria-label="Nos valeurs" style={{ listStyle: 'none', padding: 0 }}>
