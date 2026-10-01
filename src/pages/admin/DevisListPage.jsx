@@ -3,6 +3,7 @@ import { listerDevis, obtenirDevis } from '../../service/devisService';
 import { formatDate } from '../../utils/format';
 import DevisDetailModal from '../../components/admin/DevisDetailModal';
 import IconeAdmin from '../../components/admin/IconeAdmin';
+import PastillesBesoins from '../../components/admin/PastillesBesoins';
 
 export default function DevisListPage() {
   const [page, setPage] = useState(1);
@@ -81,6 +82,7 @@ export default function DevisListPage() {
                 <th scope="col">Nom</th>
                 <th scope="col">Société</th>
                 <th scope="col">Contact</th>
+                <th scope="col">Besoins</th>
                 <th scope="col">Reçu le</th>
                 <th scope="col">Statut</th>
                 <th scope="col" style={{ textAlign: 'right' }}>Actions</th>
@@ -94,6 +96,9 @@ export default function DevisListPage() {
                   <td className="adm-cellule-douce">
                     {d.email}
                     {d.telephone && <><br /><small>{d.telephone}</small></>}
+                  </td>
+                  <td>
+                    <PastillesBesoins besoins={d.typesBesoin} max={2} />
                   </td>
                   <td className="adm-cellule-douce" style={{ whiteSpace: 'nowrap' }}>{formatDate(d.createdAt)}</td>
                   <td>

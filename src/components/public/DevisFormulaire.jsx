@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { envoyerDemandeDevis } from '../../service/devisService';
 import { SERVICES } from '../../data/site';
 import Icone from '../ui/Icone';
+import SelectionMultiple from '../ui/SelectionMultiple';
 
 const TYPES_BESOIN = [...SERVICES.map((s) => s.titre), 'Autre besoin'];
 
 const VIDE = {
-  nom: '', societe: '', telephone: '', email: '', ville: '', typeBesoin: '', message: '',
+  nom: '', societe: '', telephone: '', email: '', ville: '', typesBesoin: [], message: '',
   consentementRgpd: false, site_web: '',
 };
 
@@ -85,13 +86,16 @@ export default function DevisFormulaire({ onEnvoye }) {
           <input maxLength={150} autoComplete="address-level2" {...champ('ville')} />
         </div>
         <div className="champ">
-          <label htmlFor={`${id}-typeBesoin`}>Type de besoin</label>
-          <select {...champ('typeBesoin')}>
-            <option value="">Sélectionner…</option>
-            {TYPES_BESOIN.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
+          <label htmlFor={`${id}-typesBesoin`}>Type de besoin</label>
+          <SelectionMultiple
+            id={`${id}-typesBesoin`}
+            options={TYPES_BESOIN}
+            valeurs={valeurs.typesBesoin}
+            onChange={(typesBesoin) => setValeurs((v) => ({ ...v, typesBesoin }))}
+            placeholderSuite="Ajouter un autre besoin…"
+            libelleComplet="Tous les besoins sont sélectionnés"
+            libellePastilles="Besoins sélectionnés"
+          />
         </div>
       </div>
 

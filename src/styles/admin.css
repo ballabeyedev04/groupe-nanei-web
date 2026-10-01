@@ -537,6 +537,48 @@
   color: var(--succes);
 }
 
+/* ---------- Besoins d'une demande de devis (pastilles) ---------- */
+.adm-besoins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.adm-besoin {
+  padding: 3px 10px;
+  border: 1px solid #cfe0f1;
+  border-radius: 999px;
+  background: #eef5fc;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bleu-marine);
+  white-space: nowrap;
+}
+
+.adm-besoin--plus {
+  border-style: dashed;
+  background: transparent;
+  color: var(--texte-doux);
+  cursor: help;
+}
+
+/* Texte lu par les lecteurs d'écran mais invisible à l'écran. */
+.adm-masque {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- Boutons ---------- */
 .adm-bouton {
   display: inline-flex;

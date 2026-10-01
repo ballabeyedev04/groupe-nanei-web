@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Modal from '../ui/Modal';
+import PastillesBesoins from './PastillesBesoins';
 import { repondreDevis } from '../../service/devisService';
 import { formatDate } from '../../utils/format';
 
@@ -38,7 +39,12 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
         <div style={styleLigne}><span style={styleLabel}>Téléphone</span><a href={`tel:${devis.telephone}`}>{devis.telephone}</a></div>
         <div style={styleLigne}><span style={styleLabel}>E-mail</span><a href={`mailto:${devis.email}`}>{devis.email}</a></div>
         {devis.ville && <div style={styleLigne}><span style={styleLabel}>Ville / chantier</span>{devis.ville}</div>}
-        {devis.typeBesoin && <div style={styleLigne}><span style={styleLabel}>Besoin</span>{devis.typeBesoin}</div>}
+        {devis.typesBesoin?.length > 0 && (
+          <div style={{ ...styleLigne, alignItems: 'center' }}>
+            <span style={styleLabel}>{devis.typesBesoin.length > 1 ? 'Besoins' : 'Besoin'}</span>
+            <PastillesBesoins besoins={devis.typesBesoin} />
+          </div>
+        )}
         <div style={styleLigne}><span style={styleLabel}>Reçu le</span>{formatDate(devis.createdAt)}</div>
         <div style={{ padding: '14px 16px', background: 'var(--bleu-ciel-clair)', borderRadius: 10, marginTop: 10, whiteSpace: 'pre-wrap', fontSize: 14 }}>
           {devis.message}
