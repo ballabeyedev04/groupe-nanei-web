@@ -3,8 +3,7 @@ import { formatTaille } from './format';
 // Mêmes règles que l'API (backend/src/middlewares/piecesJointes.middleware.js) :
 // vérifiées ici pour prévenir l'admin avant l'envoi, l'API restant juge final.
 export const MAX_FICHIERS = 5;
-export const MAX_PAR_FICHIER = 10 * 1024 * 1024;
-export const MAX_TOTAL = 20 * 1024 * 1024;
+export const MAX_PAR_FICHIER = 3 * 1024 * 1024;
 export const EXTENSIONS = [
   '.pdf', '.jpg', '.jpeg', '.png', '.webp', '.gif',
   '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
@@ -26,11 +25,9 @@ export function ajouterFichiers(fichiers, nouveaux) {
     if (!EXTENSIONS.includes(extension(f.name))) {
       refus.push(`« ${f.name} » : format non accepté`);
     } else if (f.size > MAX_PAR_FICHIER) {
-      refus.push(`« ${f.name} » : plus de ${formatTaille(MAX_PAR_FICHIER)}`);
+      refus.push(`« ${f.name} » fait ${formatTaille(f.size)} : veuillez mettre un fichier inférieur à 3 Mo`);
     } else if (retenus.length >= MAX_FICHIERS) {
       refus.push(`« ${f.name} » : ${MAX_FICHIERS} fichiers maximum`);
-    } else if (retenus.reduce((s, r) => s + r.size, 0) + f.size > MAX_TOTAL) {
-      refus.push(`« ${f.name} » : ${formatTaille(MAX_TOTAL)} maximum au total`);
     } else {
       retenus.push(f);
     }

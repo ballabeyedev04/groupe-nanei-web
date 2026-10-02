@@ -1,6 +1,6 @@
 import { useId, useRef } from 'react';
 import { formatTaille } from '../../utils/format';
-import { EXTENSIONS, MAX_FICHIERS, MAX_TOTAL, ajouterFichiers } from '../../utils/piecesJointes';
+import { EXTENSIONS, MAX_FICHIERS, ajouterFichiers } from '../../utils/piecesJointes';
 
 export default function ChampPiecesJointes({ fichiers, onChange, onRefus, desactive }) {
   const id = useId();
@@ -26,8 +26,8 @@ export default function ChampPiecesJointes({ fichiers, onChange, onRefus, desact
         <span className="adm-pj-libelle" id={`${id}-libelle`}>Pièces jointes</span>
         <small>
           {fichiers.length > 0
-            ? `${fichiers.length}/${MAX_FICHIERS} · ${formatTaille(total)} sur ${formatTaille(MAX_TOTAL)}`
-            : `Facultatif · ${MAX_FICHIERS} fichiers, ${formatTaille(MAX_TOTAL)} max.`}
+            ? `${fichiers.length}/${MAX_FICHIERS} fichiers · ${formatTaille(total)}`
+            : `Facultatif · ${MAX_FICHIERS} fichiers max.`}
         </small>
       </div>
 
@@ -68,7 +68,7 @@ export default function ChampPiecesJointes({ fichiers, onChange, onRefus, desact
             </svg>
             Ajouter des fichiers
           </label>
-          <small className="adm-pj-aide">PDF, images, Word, Excel, PowerPoint, OpenOffice, TXT, CSV — 10 Mo max. par fichier.</small>
+          <small className="adm-pj-aide">PDF, images, Word, Excel, PowerPoint, OpenOffice, TXT, CSV — 3 Mo max. par fichier.</small>
         </>
       )}
     </div>
