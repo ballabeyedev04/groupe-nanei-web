@@ -1088,3 +1088,142 @@
     font-size: 22px;
   }
 }
+
+/* ---------- Pièces jointes de la réponse à un devis ---------- */
+.adm-pj-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.adm-pj-libelle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bleu-marine);
+}
+
+.adm-pj-entete small,
+.adm-pj-aide {
+  font-size: 12px;
+  color: var(--texte-doux);
+}
+
+.adm-pj-aide {
+  display: block;
+  margin-top: 8px;
+}
+
+.adm-pj-liste {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.adm-pj-fichier {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  background: #f7fafd;
+  font-size: 13.5px;
+  color: var(--bleu-marine);
+}
+
+.adm-pj-nom {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-pj-taille {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--texte-doux);
+}
+
+.adm-pj-retirer {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texte-doux);
+  cursor: pointer;
+}
+
+.adm-pj-retirer:hover {
+  background: rgba(192, 57, 43, 0.1);
+  color: var(--erreur);
+}
+
+.adm-pj-retirer:focus-visible,
+.adm-pj-input:focus-visible + .adm-pj-ajouter {
+  outline: 2px solid var(--bleu-action);
+  outline-offset: 2px;
+}
+
+/* Champ fichier natif masqué mais focusable : le libellé sert de bouton. */
+.adm-pj-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.adm-pj-ajouter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px dashed #9fb9d1;
+  border-radius: 10px;
+  background: var(--blanc, #fff);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--bleu-action);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.adm-pj-ajouter:hover {
+  border-color: var(--bleu-action);
+  background: #eef5fc;
+}
+
+.adm-pj-ajouter--inactif {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.adm-pj-envoyees {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid #bfe3cb;
+  list-style: none;
+  font-size: 13px;
+}
+
+.adm-pj-envoyees li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adm-pj-envoyees span {
+  color: var(--texte-doux);
+}

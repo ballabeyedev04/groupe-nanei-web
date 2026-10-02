@@ -19,7 +19,16 @@ export async function obtenirDevis(id) {
   return data.devis;
 }
 
-export async function repondreDevis(id, { sujet, message }) {
-  const { data } = await api.post(`/devis/${id}/repondre`, { sujet, message });
+// Avec pièces jointes : multipart/form-data (le navigateur pose lui-même
+// l'en-tête et sa frontière) ; sans fichier, un simple envoi JSON.
+export async function repondreDevis(id, { sujet, message, fichiers = [] }) {
+  let corps = { sujet, message };
+  if (fichiers.length > 0) {
+    corps = new FormData();
+    corps.append('sujet', sujet);
+    corps.append('message', message);
+    fichiers.forEach((f) => corps.append('piecesJointes', f));
+  }
+  const { data } = await api.post(`/devis/${id}/repondre`, corps);
   return data.devis;
 }

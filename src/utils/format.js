@@ -19,3 +19,10 @@ export function initiales(nom = '', email = '') {
   if (mots.length >= 2) return mots[0][0] + mots[1][0];
   return (mots[0] || email || '?').slice(0, 2);
 }
+
+// Taille de fichier lisible : « 850 Ko », « 2,4 Mo ».
+export function formatTaille(octets = 0) {
+  if (octets < 1024 * 1024) return `${Math.max(1, Math.round(octets / 1024))} Ko`;
+  const mo = octets / 1024 / 1024;
+  return `${mo.toLocaleString('fr-FR', { maximumFractionDigits: mo < 10 ? 1 : 0 })} Mo`;
+}

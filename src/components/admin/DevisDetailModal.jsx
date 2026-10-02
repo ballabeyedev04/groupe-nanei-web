@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Modal from '../ui/Modal';
 import PastillesBesoins from './PastillesBesoins';
+import ChampPiecesJointes from './ChampPiecesJointes';
 import { repondreDevis } from '../../service/devisService';
-import { formatDate } from '../../utils/format';
+import { formatDate, formatTaille } from '../../utils/format';
 
 const styleLigne = { display: 'flex', gap: 10, padding: '9px 0', borderBottom: '1px solid var(--bordure)', fontSize: 14 };
 const styleLabel = { width: 140, color: 'var(--texte-doux)', flexShrink: 0 };
@@ -12,6 +13,8 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
   const [message, setMessage] = useState('');
   const [envoi, setEnvoi] = useState(false);
   const [erreur, setErreur] = useState('');
+  const [fichiers, setFichiers] = useState([]);
+  const [refusFichiers, setRefusFichiers] = useState('');
 
   if (!devis) return null;
 
@@ -22,7 +25,7 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
     setEnvoi(true);
     setErreur('');
     try {
-      const misAJour = await repondreDevis(devis.id, { sujet, message });
+      const misAJour = await repondreDevis(devis.id, { sujet, message, fichiers });
       onReponduAvecSucces(misAJour);
     } catch (err) {
       setErreur(err?.response?.data?.message || "L'envoi a échoué. Merci de réessayer.");
@@ -58,6 +61,18 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
           </div>
           <div style={{ fontSize: 13, color: 'var(--texte-doux)', marginBottom: 4 }}>Objet : {devis.reponseSujet}</div>
           <div style={{ fontSize: 13.5, whiteSpace: 'pre-wrap' }}>{devis.reponseMessage}</div>
+          {devis.reponsePiecesJointes?.length > 0 && (
+            <ul className="adm-pj-envoyees" aria-label="Pièces jointes envoyées">
+              {devis.reponsePiecesJointes.map((pj) => (
+                <li key={pj.nom}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {pj.nom} <span>({formatTaille(pj.taille)})</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -88,7 +103,9 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
                 style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14, resize: 'vertical' }}
               />
             </div>
-            {erreur && <p style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{erreur}</p>}
+            <ChampPiecesJointes fichiers={fichiers} onChange={setFichiers} onRefus={setRefusFichiers} desactive={envoi} />
+            {refusFichiers && <p role="alert" style={{ margin: 0, color: 'var(--erreur)', fontSize: 13 }}>{refusFichiers}</p>}
+            {erreur && <p role="alert" style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{erreur}</p>}
             <button type="submit" disabled={envoi} className="bouton bouton--plein" style={{ justifyContent: 'center' }}>
               {envoi ? 'Envoi en cours…' : 'Envoyer la réponse'}
             </button>
