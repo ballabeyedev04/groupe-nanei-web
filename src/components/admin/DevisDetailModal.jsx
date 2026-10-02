@@ -61,34 +61,40 @@ export default function DevisDetailModal({ devis, onFermer, onReponduAvecSucces 
         </div>
       )}
 
-      <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--bleu-marine)', marginBottom: 12 }}>
-        {dejaTraite ? 'Envoyer un nouveau message' : 'Répondre par e-mail'}
-      </h3>
-      <form onSubmit={soumettre} style={{ display: 'grid', gap: 12 }}>
-        <div>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--bleu-marine)', marginBottom: 6 }}>Objet</label>
-          <input
-            value={sujet}
-            onChange={(e) => setSujet(e.target.value)}
-            required
-            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14 }}
-          />
-        </div>
-        <div>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--bleu-marine)', marginBottom: 6 }}>Message</label>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            rows={5}
-            style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14, resize: 'vertical' }}
-          />
-        </div>
-        {erreur && <p style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{erreur}</p>}
-        <button type="submit" disabled={envoi} className="bouton bouton--plein" style={{ justifyContent: 'center' }}>
-          {envoi ? 'Envoi en cours…' : 'Envoyer la réponse'}
-        </button>
-      </form>
+      {/* Une demande traitée est close : on n'affiche plus que la réponse
+          envoyée (encadré ci-dessus), plus de formulaire. */}
+      {!dejaTraite && (
+        <>
+          <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--bleu-marine)', marginBottom: 12 }}>
+            Répondre par e-mail
+          </h3>
+          <form onSubmit={soumettre} style={{ display: 'grid', gap: 12 }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--bleu-marine)', marginBottom: 6 }}>Objet</label>
+              <input
+                value={sujet}
+                onChange={(e) => setSujet(e.target.value)}
+                required
+                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14 }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--bleu-marine)', marginBottom: 6 }}>Message</label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                rows={5}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--bordure)', fontSize: 14, resize: 'vertical' }}
+              />
+            </div>
+            {erreur && <p style={{ margin: 0, color: 'var(--erreur)', fontSize: 13.5 }}>{erreur}</p>}
+            <button type="submit" disabled={envoi} className="bouton bouton--plein" style={{ justifyContent: 'center' }}>
+              {envoi ? 'Envoi en cours…' : 'Envoyer la réponse'}
+            </button>
+          </form>
+        </>
+      )}
     </Modal>
   );
 }
